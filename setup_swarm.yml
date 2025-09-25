@@ -1,0 +1,90 @@
+# setup_swarm.yml
+---
+- name: Configure Docker Swarm Cluster - Initialize Master and Extract Tokens
+  hosts: master
+  become: yes
+
+  tasks:
+    - name: Open Docker Swarm ports on master node
+      ansible.posix.firewalld:
+        zone: public
+        port: "{{ item.port }}/{{ item.protocol }}"
+        permanent: yes
+        state: enabled
+      loop:
+        - { port: 2377, protocol: tcp } # Swarm management
+        - { port: 7946, protocol: tcp } # Overlay network discovery
+        - { port: 7946, protocol: udp } # Overlay network discovery
+        - { port: 4789, protocol: udp } # Overlay network traffic (VXLAN)
+      notify:
+        - Reload firewalld # 방화벽 규칙 적용 후 재로드 핸들러 호출
+
+    - name: Check if Docker Swarm is already active on master node
+      ansible.builtin.shell: docker info --format '{% raw %}{{.Swarm.LocalNodeState}}{% endraw %}'
+      register: docker_swarm_state
+      changed_when: false
+      failed_when: docker_swarm_state.rc != 0 and 'Cannot connect to the Docker daemon' not in docker_swarm_state.stderr
+
+    - name: Initialize Docker Swarm if not already active
+      ansible.builtin.command: docker swarm init --advertise-addr {{ ansible_host }}
+      register: swarm_init_result
+      failed_when: swarm_init_result.rc != 0 and 'Swarm is already initialized' not in swarm_init_result.stderr
+      changed_when: true
+      when: docker_swarm_state.stdout | trim == "inactive" or docker_swarm_state.stdout | trim == ""
+
+    - name: Extract Docker Swarm worker join token
+      ansible.builtin.command: docker swarm join-token worker -q
+      register: worker_join_token_result
+      when: docker_swarm_state.stdout | trim == "active" or (swarm_init_result is defined and swarm_init_result is succeeded)
+      tags: get_token
+
+    - name: Extract Docker Swarm manager join token
+      ansible.builtin.command: docker swarm join-token manager -q
+      register: manager_join_token_result
+      when: docker_swarm_state.stdout | trim == "active" or (swarm_init_result is defined and swarm_init_result is succeeded)
+      tags: get_token
+
+    - name: Store worker node join command
+      ansible.builtin.set_fact:
+        swarm_worker_join_command: "docker swarm join --token {{ worker_join_token_result.stdout }} {{ ansible_host }}:2377"
+      when: (docker_swarm_state.stdout | trim == "active" or (swarm_init_result is defined and swarm_init_result is succeeded)) and worker_join_token_result is defined
+
+    - name: Store manager node join command
+      ansible.builtin.set_fact:
+        swarm_manager_join_command: "docker swarm join --token {{ manager_join_token_result.stdout }} {{ ansible_host }}:2377"
+      when: (docker_swarm_state.stdout | trim == "active" or (swarm_init_result is defined and swarm_init_result is succeeded)) and manager_join_token_result is defined
+
+    - name: Debug print worker join command
+      ansible.builtin.debug:
+        msg: "Worker node join command: {{ swarm_worker_join_command }}"
+      when: (docker_swarm_state.stdout | trim == "active" or (swarm_init_result is defined and swarm_init_result is succeeded)) and worker_join_token_result is defined
+
+  handlers:
+    - name: Reload firewalld
+      ansible.builtin.systemd:
+        name: firewalld
+        state: reloaded
+
+- name: Configure Docker Swarm Cluster - Join Worker Nodes
+  hosts: worker
+  become: yes
+
+  tasks:
+    - name: Wait for and retrieve join command from master node
+      ansible.builtin.wait_for:
+        timeout: 60
+      delegate_to: localhost
+      run_once: true
+      when: hostvars[groups['master'][0]]['swarm_worker_join_command'] is not defined or hostvars[groups['master'][0]]['swarm_worker_join_command'] | trim == ""
+
+    - name: Join worker node to Docker Swarm cluster
+      ansible.builtin.command: "{{ hostvars[groups['master'][0]]['swarm_worker_join_command'] }}"
+      register: worker_join_result
+      changed_when: "'This node joined a swarm as a worker' in worker_join_result.stdout"
+      failed_when: worker_join_result.rc != 0 and 'This node is already part of a swarm' not in worker_join_result.stderr
+      when: hostvars[groups['master'][0]]['swarm_worker_join_command'] is defined and hostvars[groups['master'][0]]['swarm_worker_join_command'] | trim != ""
+
+    - name: Print worker node join result
+      ansible.builtin.debug:
+        var: worker_join_result.stdout_lines
+      when: worker_join_result is defined

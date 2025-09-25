@@ -1,0 +1,60 @@
+# install_docker.yml
+---
+- name: Install Docker and configure on Rocky Linux 9
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Update dnf cache and install essential packages
+      dnf:
+        name: dnf-utils
+        state: present
+        update_cache: yes
+      tags: install_docker
+
+    - name: Add Docker GPG key
+      rpm_key:
+        state: present
+        key: https://download.docker.com/linux/centos/gpg
+      tags: install_docker
+
+    - name: Add Docker YUM repository
+      ansible.builtin.get_url:
+        url: https://download.docker.com/linux/centos/docker-ce.repo
+        dest: /etc/yum.repos.d/docker-ce.repo
+        mode: '0644'
+      tags: install_docker
+
+    - name: Install Docker Engine, CLI, and Containerd
+      dnf:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        state: present
+        update_cache: yes
+      tags: install_docker
+
+    - name: Start Docker service and enable on boot
+      ansible.builtin.systemd:
+        name: docker
+        state: started
+        enabled: yes
+      tags: install_docker
+
+    - name: Add remote user to docker group
+      ansible.builtin.user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: yes
+      notify:
+        - Request SSH session re-login after adding to Docker group
+      tags: install_docker
+
+  handlers:
+    - name: Request SSH session re-login after adding to Docker group
+      ansible.builtin.debug:
+        msg: |
+          handler error

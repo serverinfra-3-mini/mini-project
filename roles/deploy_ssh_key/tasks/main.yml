@@ -1,0 +1,30 @@
+# roles/deploy_ssh_key/tasks/main.yml
+---
+- name: Check if public key exists on controller ({{ deploy_public_key_path }})
+  ansible.builtin.stat:
+    path: "{{ deploy_public_key_path }}"
+  register: ssh_key_status
+  delegate_to: localhost # 이 태스크는 컨트롤 노드에서 실행
+
+- name: Fail if public key does not exist on controller
+  ansible.builtin.fail:
+    msg: "SSH public key file does not exist on the controller node: {{ deploy_public_key_path }}"
+  when: not ssh_key_status.stat.exists
+  delegate_to: localhost # 이 태스크는 컨트롤 노드에서 실행
+
+- name: Ensure .ssh directory exists for the target user on managed node
+  ansible.builtin.file:
+    # `~{{ deploy_target_user_on_remote }}`는 해당 사용자의 홈 디렉토리를 참조합니다.
+    # 예: deploy_target_user_on_remote가 'root'이면 '/root/.ssh'가 됩니다.
+    path: "~{{ deploy_target_user_on_remote }}/.ssh"
+    state: directory
+    mode: '0700' # .ssh 디렉토리는 0700 권한이어야 합니다.
+    owner: "{{ deploy_target_user_on_remote }}"
+    group: "{{ deploy_target_user_on_remote }}"
+
+- name: Add controller's public key to authorized_keys for the target user on managed node
+  ansible.posix.authorized_key:
+    user: "{{ deploy_target_user_on_remote }}" # 키를 추가할 원격 사용자의 계정
+    state: present
+    key: "{{ lookup('file', deploy_public_key_path) }}" # 컨트롤 노드의 공개 키 파일을 읽어옵니다.
+  # authorized_key 모듈은 .ssh/authorized_keys 파일의 권한도 자동으로 올바르게 설정해줍니다.

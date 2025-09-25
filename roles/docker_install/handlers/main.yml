@@ -1,0 +1,10 @@
+# roles/docker_install/handlers/main.yml
+---
+- name: Request SSH session re-login after adding to Docker group
+  ansible.builtin.debug:
+    msg: |
+      ******************************************************************
+      ** [ACTION REQUIRED] Please re-login to your SSH session       **
+      ** (or run `newgrp docker`) on the managed node(s) to apply    **
+      ** Docker group changes for user '{{ ansible_user }}'.         **
+      ******************************************************************

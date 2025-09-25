@@ -1,0 +1,39 @@
+---
+- name: generate SSH key on Ansible controller
+  hosts: localhost         # 이 롤은 컨트롤 노드(자신)에서 실행됩니다.
+  connection: local      # 로컬에서 실행합니다.
+  become: no             # 키 생성은 일반적으로 현재 사용자 권한으로 수행됩니다.
+
+  vars:
+    # 필요한 경우 여기에 키 경로와 비밀번호를 재정의할 수 있습니다.
+    # ssh_key_path: "~/.ssh/my_custom_ansible_key"
+    # ssh_key_passphrase: "my_secret_passphrase"
+
+  roles:
+    - ssh_key_generator    # 위에서 정의한 롤을 호출합니다.
+- name: deploy SSH public key to managed nodes
+  hosts: all                     # inventory.ini에 정의된 모든 호스트 (master, worker 그룹 포함)
+  # ansible.cfg에 remote_user=root로 설정되어 있으므로, root 권한으로 실행됩니다.
+  # 만약 첫 접속이라면, 다음처럼 --ask-pass (-k) 옵션을 사용하여 비밀번호를 입력해야 합니다.
+  # ansible-playbook playbook_deploy_ssh_key.yml -k
+
+  vars:
+    # 롤 기본값 외에 다른 값을 사용하고 싶다면 여기서 재정의할 수 있습니다.
+    # deploy_public_key_path: "/path/to/another/key.pub"
+    # deploy_target_user_on_remote: "myuser"
+
+  roles:
+    - deploy_ssh_key             # 위에서 정의한 롤을 호출합니다.
+- name: install Docker and configure on Rocky Linux 9
+  hosts: all                     # inventory.ini에 정의된 모든 호스트에 Docker를 설치합니다.
+  become: yes                    # 설치 및 설정에는 root 권한이 필요합니다.
+
+  roles:
+    - docker_install             # 위에서 정의한 롤을 호출합니다.
+- name: configure Docker Swarm Cluster
+  hosts: all                     # inventory.ini에 정의된 모든 호스트에 롤을 적용합니다.
+  become: yes                    # Swarm 설정에는 root 권한이 필요합니다.
+  gather_facts: yes              # ansible_host 등의 변수 사용을 위해 팩트 수집이 필요합니다.
+
+  roles:
+    - docker_swarm_setup         # 위에서 정의한 롤을 호출합니다.

@@ -1,0 +1,21 @@
+---
+- name: Check if private key exists at ~/.ssh/id_rsa
+  ansible.builtin.stat:
+    path: "{{ ssh_key_path | default('~/.ssh/id_rsa') }}" # 기본 경로를 ~/.ssh/id_rsa로 설정
+  register: id_rsa_status
+
+- name: Generate SSH key pair if it does not exist
+  ansible.builtin.shell: |
+    ssh-keygen -t rsa -b 4096 -f {{ ssh_key_path | default('~/.ssh/id_rsa') }} -N "{{ ssh_key_passphrase | default('') }}"
+    chmod 600 {{ ssh_key_path | default('~/.ssh/id_rsa') }}
+    chmod 644 {{ ssh_key_path | default('~/.ssh/id_rsa') }}.pub
+  args:
+    # 키가 존재하지 않을 때만 실행 (멱등성 확보)
+    creates: "{{ ssh_key_path | default('~/.ssh/id_rsa') }}"
+  when: not id_rsa_status.stat.exists
+  register: keygen_output
+  changed_when: keygen_output.rc == 0
+
+- name: Display status of key generation
+  ansible.builtin.debug:
+    msg: "SSH key generation for {{ ssh_key_path | default('~/.ssh/id_rsa') }} completed or key already existed."

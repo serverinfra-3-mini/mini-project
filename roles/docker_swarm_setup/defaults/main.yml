@@ -1,0 +1,13 @@
+# roles/docker_swarm_setup/defaults/main.yml
+---
+# Docker Swarm 통신에 필요한 포트 목록
+swarm_ports_to_open:
+  - { port: 2377, protocol: tcp } # Swarm management
+  - { port: 7946, protocol: tcp } # Overlay network discovery
+  - { port: 7946, protocol: udp } # Overlay network discovery
+  - { port: 4789, protocol: udp } # Overlay network traffic (VXLAN)
+
+# 마스터 노드에서 저장될 조인 커맨드 변수 (worker 노드에서 접근)
+# 기본값은 비워두고 런타임에 master_init 태스크에서 set_fact로 설정됩니다.
+swarm_worker_join_command: ""
+swarm_manager_join_command: ""

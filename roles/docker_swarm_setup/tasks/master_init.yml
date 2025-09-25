@@ -1,0 +1,57 @@
+# roles/docker_swarm_setup/tasks/master_init.yml
+---
+- name: Open Docker Swarm ports on master node
+  ansible.posix.firewalld:
+    zone: public
+    port: "{{ item.port }}/{{ item.protocol }}"
+    permanent: yes
+    state: enabled
+  loop: "{{ swarm_ports_to_open }}"
+  notify:
+    - Reload firewalld
+
+- name: Check if Docker Swarm is already active on master node
+  ansible.builtin.shell: docker info --format '{% raw %}{{.Swarm.LocalNodeState}}{% endraw %}'
+  register: docker_swarm_state_result
+  changed_when: false
+  # Docker 데몬에 연결할 수 없는 경우 실패 처리하지 않음 (초기 상태일 수 있음)
+  failed_when: docker_swarm_state_result.rc != 0 and 'Cannot connect to the Docker daemon' not in docker_swarm_state_result.stderr
+
+- name: Initialize Docker Swarm if not already active
+  ansible.builtin.command: docker swarm init --advertise-addr {{ ansible_host }}
+  register: swarm_init_result
+  # 'Swarm is already initialized' 메시지가 있으면 changed 상태로 처리하지 않고, 실패로 간주하지 않음
+  failed_when: swarm_init_result.rc != 0 and 'Swarm is already initialized' not in swarm_init_result.stderr
+  changed_when: "'Swarm initialized' in swarm_init_result.stdout" # 실제로 초기화되었을 때만 changed
+  when: docker_swarm_state_result.stdout | trim != "active" # active가 아닐 때만 초기화 시도
+
+- name: Extract Docker Swarm worker join token
+  ansible.builtin.command: docker swarm join-token worker -q
+  register: worker_join_token_result
+  # swarm이 active이거나 초기화 태스크가 성공했을 때 토큰 추출
+  when: docker_swarm_state_result.stdout | trim == "active" or (swarm_init_result is defined and swarm_init_result is succeeded)
+  tags: get_token
+
+- name: Extract Docker Swarm manager join token
+  ansible.builtin.command: docker swarm join-token manager -q
+  register: manager_join_token_result
+  # swarm이 active이거나 초기화 태스크가 성공했을 때 토큰 추출
+  when: docker_swarm_state_result.stdout | trim == "active" or (swarm_init_result is defined and swarm_init_result is succeeded)
+  tags: get_token
+
+- name: Store worker node join command as a fact
+  ansible.builtin.set_fact:
+    swarm_worker_join_command: "docker swarm join --token {{ worker_join_token_result.stdout | trim }} {{ ansible_host }}:2377"
+  # 토큰 추출이 성공하고, join-token 결과가 있을 때만 fact 저장
+  when: (docker_swarm_state_result.stdout | trim == "active" or (swarm_init_result is defined and swarm_init_result is succeeded)) and worker_join_token_result is defined and worker_join_token_result.stdout is defined
+
+- name: Store manager node join command as a fact
+  ansible.builtin.set_fact:
+    swarm_manager_join_command: "docker swarm join --token {{ manager_join_token_result.stdout | trim }} {{ ansible_host }}:2377"
+  # 토큰 추출이 성공하고, join-token 결과가 있을 때만 fact 저장
+  when: (docker_swarm_state_result.stdout | trim == "active" or (swarm_init_result is defined and swarm_init_result is succeeded)) and manager_join_token_result is defined and manager_join_token_result.stdout is defined
+
+- name: Debug print worker join command (Master node)
+  ansible.builtin.debug:
+    msg: "Worker node join command: {{ swarm_worker_join_command }}"
+  when: swarm_worker_join_command is defined and swarm_worker_join_command | trim != ""

@@ -1,0 +1,37 @@
+# roles/docker_swarm_setup/tasks/worker_join.yml
+---
+- name: Ensure master node facts are available before joining worker
+  ansible.builtin.wait_for:
+    timeout: 60 # 60초 동안 기다림
+  delegate_to: localhost
+  run_once: true # 컨트롤 노드에서 한 번만 실행
+  # 마스터 노드에서 'swarm_worker_join_command' fact가 정의될 때까지 기다림
+  when: hostvars[groups['master'][0]]['swarm_worker_join_command'] is not defined or hostvars[groups['master'][0]]['swarm_worker_join_command'] | trim == ""
+  # 백슬래시('\')를 제거하고 조건을 한 줄로 이어붙였습니다.
+  # 또는 YAML의 멀티라인 문자열 방식을 사용할 수도 있습니다. 예:
+  # when: |
+  #   hostvars[groups['master'][0]]['swarm_worker_join_command'] is not defined or
+  #   hostvars[groups['master'][0]]['swarm_worker_join_command'] | trim == ""
+
+- name: Fail if worker join command is still not available after waiting
+  ansible.builtin.fail:
+    msg: "Failed to retrieve worker join command from master node."
+  when: hostvars[groups['master'][0]]['swarm_worker_join_command'] is not defined or hostvars[groups['master'][0]]['swarm_worker_join_command'] | trim == ""
+  # 백슬래시('\')를 제거하고 조건을 한 줄로 이어붙였습니다.
+  run_once: true
+  delegate_to: localhost
+
+- name: Join worker node to Docker Swarm cluster
+  ansible.builtin.command: "{{ hostvars[groups['master'][0]]['swarm_worker_join_command'] }}"
+  register: worker_join_result
+  changed_when: "'This node joined a swarm as a worker' in worker_join_result.stdout"
+  # 'This node is already part of a swarm' 메시지가 있으면 실패로 간주하지 않음
+  failed_when: worker_join_result.rc != 0 and 'This node is already part of a swarm' not in worker_join_result.stderr
+  # 마스터의 join command가 정의되었을 때만 조인 시도
+  when: hostvars[groups['master'][0]]['swarm_worker_join_command'] is defined and hostvars[groups['master'][0]]['swarm_worker_join_command'] | trim != ""
+  # 백슬래시('\')를 제거하고 조건을 한 줄로 이어붙였습니다.
+
+- name: Print worker node join result
+  ansible.builtin.debug:
+    var: worker_join_result.stdout_lines
+  when: worker_join_result is defined

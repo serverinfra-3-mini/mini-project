@@ -1,0 +1,8 @@
+---
+# 컨트롤 노드에 있는 배포할 SSH 공개 키 파일 경로입니다.
+# ansible.cfg의 private_key_file = ~/.ssh/id_rsa 설정에 해당하는 공개 키 경로입니다.
+deploy_public_key_path: "~/.ssh/id_rsa.pub"
+
+# 원격 서버에서 공개 키를 추가할 실제 사용자 이름입니다.
+# 기본값을 'root'로 설정했습니다. 필요에 따라 변경하여 사용하세요.
+deploy_target_user_on_remote: "root"

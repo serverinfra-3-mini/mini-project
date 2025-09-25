@@ -1,0 +1,7 @@
+# roles/docker_swarm_setup/handlers/main.yml
+---
+- name: Reload firewalld
+  ansible.builtin.systemd:
+    name: firewalld
+    state: reloaded
+    daemon_reload: yes # firewalld service를 리로드할 때 daemon-reload도 함께 수행하여 변경사항 즉시 적용

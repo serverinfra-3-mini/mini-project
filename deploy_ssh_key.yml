@@ -1,0 +1,45 @@
+---
+- name: Deploy SSH public key from controller to managed nodes
+  hosts: all                     # inventory.ini에 정의된 모든 호스트 (master, worker 그룹 모두 포함)
+  # ansible.cfg에 remote_user=root로 설정되어 있으므로, 굳이 become: yes를 명시하지 않아도 됩니다.
+  # 만약 remote_user가 root가 아니면서 root 권한이 필요할 경우 become: yes를 사용합니다.
+
+  vars:
+    # Ansible 컨트롤 노드의 ~/.ssh/id_rsa.pub 파일을 사용합니다.
+    # 이 경로는 ansible.cfg의 private_key_file 설정과 연결됩니다.
+    ansible_ssh_key_to_deploy: "~/.ssh/id_rsa.pub"
+
+    # 이 변수는 원격 서버에서 공개 키를 추가할 실제 사용자 이름을 지정합니다.
+    # 진환님께서 `root`로 원격 접속하지만, 키는 `root` 계정 혹은 다른 일반 계정에 추가할 수 있습니다.
+    # 만약 root 계정의 authorized_keys에 추가하려면 "root"로 변경하세요.
+    target_user_on_remote: "root" # <<-- 여기에 원격 서버 사용자 이름을 입력해주세요!
+
+  tasks:
+    - name: Check if SSH public key exists on controller
+      stat:
+        path: "{{ ansible_ssh_key_to_deploy }}"
+      register: ssh_key_status
+      delegate_to: localhost # This task runs on the controller node
+
+    - name: Fail if SSH public key does not exist on controller
+      fail:
+        msg: "SSH public key file does not exist on the controller node: {{ ansible_ssh_key_to_deploy }}"
+      when: not ssh_key_status.stat.exists
+      delegate_to: localhost
+
+    - name: Ensure .ssh directory exists for the target user on managed node
+      ansible.builtin.file:
+        path: "~{{ target_user_on_remote }}/.ssh"
+        state: directory
+        mode: '0700'
+        owner: "{{ target_user_on_remote }}"
+        group: "{{ target_user_on_remote }}"
+      # remote_user가 root이므로 다른 사용자 홈 디렉터리 생성 및 소유권 설정 가능
+
+    - name: Add public key to .ssh/authorized_keys for the target user on managed node
+      ansible.posix.authorized_key:
+        user: "{{ target_user_on_remote }}"
+        state: present
+        key: "{{ lookup('file', ansible_ssh_key_to_deploy) }}"
+      # lookup('file', ...)은 컨트롤 노드의 파일을 읽어옵니다.
+

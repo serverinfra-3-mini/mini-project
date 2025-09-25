@@ -1,0 +1,9 @@
+docker_user: root
+docker_username: "hyun3740"
+docker_password: "hyunjune05"
+db_root_password: "ChangeMeRootPass!"
+db_name: "wordpress"
+db_user: "wp_user"
+db_password: "ChangeMeWPpass!"
+wp_port: 8080
+

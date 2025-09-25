@@ -1,0 +1,9 @@
+---
+- name: Deploy WordPress stack
+  template:
+    src: wp-compose.yml.j2
+    dest: /opt/wordpress/wp-compose.yml
+
+- name: Start WordPress stack
+  command: docker stack deploy -c /opt/wordpress/wp-compose.yml wp_stack
+

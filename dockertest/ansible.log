@@ -1,0 +1,492 @@
+2025-09-25 17:14:41,725 p=7132 u=root n=ansible | [DEPRECATION WARNING]: DEFAULT_GATHER_SUBSET option, the module_defaults 
+keyword is a more generic version and can apply to all calls to the 
+M(ansible.builtin.gather_facts) or M(ansible.builtin.setup) actions, use 
+module_defaults instead. This feature will be removed from ansible-core in 
+version 2.18. Deprecation warnings can be disabled by setting 
+deprecation_warnings=False in ansible.cfg.
+2025-09-25 17:14:41,944 p=7132 u=root n=ansible | PLAY [Bootstrap common prerequisites] ******************************************
+2025-09-25 17:14:41,974 p=7132 u=root n=ansible | TASK [Gathering Facts] *********************************************************
+2025-09-25 17:14:54,878 p=7132 u=root n=ansible |  [ERROR]: User interrupted execution
+
+2025-09-25 17:15:27,585 p=7374 u=root n=ansible | [DEPRECATION WARNING]: DEFAULT_GATHER_SUBSET option, the module_defaults 
+keyword is a more generic version and can apply to all calls to the 
+M(ansible.builtin.gather_facts) or M(ansible.builtin.setup) actions, use 
+module_defaults instead. This feature will be removed from ansible-core in 
+version 2.18. Deprecation warnings can be disabled by setting 
+deprecation_warnings=False in ansible.cfg.
+2025-09-25 17:15:27,766 p=7374 u=root n=ansible | PLAY [Bootstrap common prerequisites] ******************************************
+2025-09-25 17:15:27,780 p=7374 u=root n=ansible | TASK [Gathering Facts] *********************************************************
+2025-09-25 17:15:46,147 p=7374 u=root n=ansible | ok: [test-worker1]
+2025-09-25 17:15:46,196 p=7374 u=root n=ansible | ok: [test-worker2]
+2025-09-25 17:15:46,271 p=7374 u=root n=ansible | ok: [test-master]
+2025-09-25 17:15:46,332 p=7374 u=root n=ansible | TASK [common : Remove old Docker packages] *************************************
+2025-09-25 17:15:50,445 p=7374 u=root n=ansible | ok: [test-master]
+2025-09-25 17:15:58,311 p=7374 u=root n=ansible | ok: [test-worker1]
+2025-09-25 17:15:58,655 p=7374 u=root n=ansible | ok: [test-worker2]
+2025-09-25 17:15:58,674 p=7374 u=root n=ansible | TASK [common : Remove old Docker repo if exists] *******************************
+2025-09-25 17:16:00,712 p=7374 u=root n=ansible | ok: [test-worker1]
+2025-09-25 17:16:00,734 p=7374 u=root n=ansible | ok: [test-worker2]
+2025-09-25 17:16:00,859 p=7374 u=root n=ansible | ok: [test-master]
+2025-09-25 17:16:00,869 p=7374 u=root n=ansible | TASK [common : Clean dnf cache] ************************************************
+2025-09-25 17:16:03,393 p=7374 u=root n=ansible | changed: [test-worker1]
+2025-09-25 17:16:03,446 p=7374 u=root n=ansible | changed: [test-worker2]
+2025-09-25 17:16:03,603 p=7374 u=root n=ansible | changed: [test-master]
+2025-09-25 17:16:03,620 p=7374 u=root n=ansible | TASK [common : Ensure python3 installed] ***************************************
+2025-09-25 17:16:03,850 p=7374 u=root n=ansible | changed: [test-master]
+2025-09-25 17:16:03,904 p=7374 u=root n=ansible | changed: [test-worker1]
+2025-09-25 17:16:03,957 p=7374 u=root n=ansible | changed: [test-worker2]
+2025-09-25 17:16:03,968 p=7374 u=root n=ansible | TASK [common : Ensure /usr/bin/python symlink points to python3] ***************
+2025-09-25 17:16:04,183 p=7374 u=root n=ansible | changed: [test-master]
+2025-09-25 17:16:04,265 p=7374 u=root n=ansible | changed: [test-worker1]
+2025-09-25 17:16:04,284 p=7374 u=root n=ansible | changed: [test-worker2]
+2025-09-25 17:16:04,299 p=7374 u=root n=ansible | TASK [common : Install prerequisites] ******************************************
+2025-09-25 17:16:25,062 p=7374 u=root n=ansible | changed: [test-worker2]
+2025-09-25 17:16:25,849 p=7374 u=root n=ansible | changed: [test-worker1]
+2025-09-25 17:16:46,784 p=7374 u=root n=ansible | changed: [test-master]
+2025-09-25 17:16:46,805 p=7374 u=root n=ansible | TASK [common : Add Docker CE repo (CentOS 9 Stream)] ***************************
+2025-09-25 17:16:49,666 p=7374 u=root n=ansible | changed: [test-worker1]
+2025-09-25 17:16:49,781 p=7374 u=root n=ansible | changed: [test-worker2]
+2025-09-25 17:16:50,203 p=7374 u=root n=ansible | changed: [test-master]
+2025-09-25 17:16:50,237 p=7374 u=root n=ansible | TASK [common : Install Docker packages] ****************************************
+2025-09-25 17:17:11,528 p=7374 u=root n=ansible | changed: [test-master]
+2025-09-25 17:17:12,323 p=7374 u=root n=ansible | changed: [test-worker1]
+2025-09-25 17:17:15,692 p=7374 u=root n=ansible | changed: [test-worker2]
+2025-09-25 17:17:15,701 p=7374 u=root n=ansible | TASK [common : Start and enable Docker service] ********************************
+2025-09-25 17:17:22,747 p=7374 u=root n=ansible | changed: [test-worker1]
+2025-09-25 17:17:22,901 p=7374 u=root n=ansible | changed: [test-worker2]
+2025-09-25 17:17:23,896 p=7374 u=root n=ansible | changed: [test-master]
+2025-09-25 17:17:23,909 p=7374 u=root n=ansible | TASK [common : Wait for Docker socket] *****************************************
+2025-09-25 17:17:26,354 p=7374 u=root n=ansible | ok: [test-worker2]
+2025-09-25 17:17:26,390 p=7374 u=root n=ansible | ok: [test-worker1]
+2025-09-25 17:17:26,564 p=7374 u=root n=ansible | ok: [test-master]
+2025-09-25 17:17:26,580 p=7374 u=root n=ansible | TASK [common : Install Python Docker SDK] **************************************
+2025-09-25 17:17:33,914 p=7374 u=root n=ansible | changed: [test-worker1]
+2025-09-25 17:17:33,976 p=7374 u=root n=ansible | changed: [test-worker2]
+2025-09-25 17:17:34,714 p=7374 u=root n=ansible | changed: [test-master]
+2025-09-25 17:17:34,743 p=7374 u=root n=ansible | TASK [common : Add user to docker group] ***************************************
+2025-09-25 17:17:37,217 p=7374 u=root n=ansible | changed: [test-worker2]
+2025-09-25 17:17:37,252 p=7374 u=root n=ansible | changed: [test-worker1]
+2025-09-25 17:17:37,367 p=7374 u=root n=ansible | changed: [test-master]
+2025-09-25 17:17:37,392 p=7374 u=root n=ansible | TASK [common : Docker login via CLI] *******************************************
+2025-09-25 17:17:41,934 p=7374 u=root n=ansible | changed: [test-worker2]
+2025-09-25 17:17:41,953 p=7374 u=root n=ansible | changed: [test-master]
+2025-09-25 17:17:42,036 p=7374 u=root n=ansible | changed: [test-worker1]
+2025-09-25 17:17:42,228 p=7374 u=root n=ansible | PLAY [Initialize Swarm on master] **********************************************
+2025-09-25 17:17:42,280 p=7374 u=root n=ansible | TASK [swarm_init : Initialize Docker Swarm if not already part of one] *********
+2025-09-25 17:17:44,180 p=7374 u=root n=ansible | changed: [test-master]
+2025-09-25 17:17:44,256 p=7374 u=root n=ansible | TASK [swarm_init : Check if Swarm is active] ***********************************
+2025-09-25 17:17:46,779 p=7374 u=root n=ansible | changed: [test-master]
+2025-09-25 17:17:46,826 p=7374 u=root n=ansible | TASK [swarm_init : Save worker join token (only if master)] ********************
+2025-09-25 17:17:48,246 p=7374 u=root n=ansible | changed: [test-master]
+2025-09-25 17:17:48,280 p=7374 u=root n=ansible | TASK [swarm_init : Write join token to file] ***********************************
+2025-09-25 17:17:51,236 p=7374 u=root n=ansible | changed: [test-master]
+2025-09-25 17:17:51,315 p=7374 u=root n=ansible | PLAY [Join workers to Swarm] ***************************************************
+2025-09-25 17:17:51,368 p=7374 u=root n=ansible | TASK [swarm_join : Check if node is already part of a Swarm] *******************
+2025-09-25 17:17:53,107 p=7374 u=root n=ansible | ok: [test-worker1]
+2025-09-25 17:17:53,152 p=7374 u=root n=ansible | ok: [test-worker2]
+2025-09-25 17:17:53,166 p=7374 u=root n=ansible | TASK [swarm_join : Join worker to Swarm] ***************************************
+2025-09-25 17:19:52,965 p=7374 u=root n=ansible | fatal: [test-worker1]: FAILED! => {"attempts": 5, "changed": true, "cmd": "docker swarm join --token SWMTKN-1-0hlmf760wojinx5z49tsg2v0bzb8a4oecv3rmv3yp6n7abkdu4-3pyq7vqaym7lwssuww10g8c8a 192.168.100.7:2377", "delta": "0:00:10.078818", "end": "2025-09-25 17:19:52.766882", "msg": "non-zero return code", "rc": 1, "start": "2025-09-25 17:19:42.688064", "stderr": "Error response from daemon: rpc error: code = Unavailable desc = connection error: desc = \"transport: Error while dialing: dial tcp 192.168.100.7:2377: connect: no route to host\"", "stderr_lines": ["Error response from daemon: rpc error: code = Unavailable desc = connection error: desc = \"transport: Error while dialing: dial tcp 192.168.100.7:2377: connect: no route to host\""], "stdout": "", "stdout_lines": []}
+2025-09-25 17:19:53,059 p=7374 u=root n=ansible | fatal: [test-worker2]: FAILED! => {"attempts": 5, "changed": true, "cmd": "docker swarm join --token SWMTKN-1-0hlmf760wojinx5z49tsg2v0bzb8a4oecv3rmv3yp6n7abkdu4-3pyq7vqaym7lwssuww10g8c8a 192.168.100.7:2377", "delta": "0:00:10.103424", "end": "2025-09-25 17:19:52.846265", "msg": "non-zero return code", "rc": 1, "start": "2025-09-25 17:19:42.742841", "stderr": "Error response from daemon: rpc error: code = Unavailable desc = connection error: desc = \"transport: Error while dialing: dial tcp 192.168.100.7:2377: connect: no route to host\"", "stderr_lines": ["Error response from daemon: rpc error: code = Unavailable desc = connection error: desc = \"transport: Error while dialing: dial tcp 192.168.100.7:2377: connect: no route to host\""], "stdout": "", "stdout_lines": []}
+2025-09-25 17:19:53,061 p=7374 u=root n=ansible | PLAY RECAP *********************************************************************
+2025-09-25 17:19:53,061 p=7374 u=root n=ansible | test-master                : ok=18   changed=14   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2025-09-25 17:19:53,061 p=7374 u=root n=ansible | test-worker1               : ok=15   changed=10   unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-09-25 17:19:53,061 p=7374 u=root n=ansible | test-worker2               : ok=15   changed=10   unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-09-25 17:20:11,800 p=13787 u=root n=ansible | [DEPRECATION WARNING]: DEFAULT_GATHER_SUBSET option, the module_defaults keyword is a more generic version and can apply to all calls to the 
+M(ansible.builtin.gather_facts) or M(ansible.builtin.setup) actions, use module_defaults instead. This feature will be removed from ansible-core in version 
+2.18. Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+2025-09-25 17:20:12,171 p=13787 u=root n=ansible | PLAY [Bootstrap common prerequisites] ************************************************************************************************************************
+2025-09-25 17:20:12,222 p=13787 u=root n=ansible | TASK [Gathering Facts] ***************************************************************************************************************************************
+2025-09-25 17:20:30,683 p=13787 u=root n=ansible | ok: [test-worker1]
+2025-09-25 17:20:30,730 p=13787 u=root n=ansible | ok: [test-worker2]
+2025-09-25 17:20:30,974 p=13787 u=root n=ansible | ok: [test-master]
+2025-09-25 17:20:31,023 p=13787 u=root n=ansible | TASK [common : Remove old Docker packages] *******************************************************************************************************************
+2025-09-25 17:20:34,214 p=13787 u=root n=ansible | ok: [test-worker2]
+2025-09-25 17:20:34,261 p=13787 u=root n=ansible | ok: [test-worker1]
+2025-09-25 17:20:35,207 p=13787 u=root n=ansible | ok: [test-master]
+2025-09-25 17:20:35,218 p=13787 u=root n=ansible | TASK [common : Remove old Docker repo if exists] *************************************************************************************************************
+2025-09-25 17:20:37,172 p=13787 u=root n=ansible | changed: [test-worker2]
+2025-09-25 17:20:37,288 p=13787 u=root n=ansible | changed: [test-worker1]
+2025-09-25 17:20:37,380 p=13787 u=root n=ansible | changed: [test-master]
+2025-09-25 17:20:37,405 p=13787 u=root n=ansible | TASK [common : Clean dnf cache] ******************************************************************************************************************************
+2025-09-25 17:20:40,006 p=13787 u=root n=ansible | changed: [test-worker2]
+2025-09-25 17:20:40,095 p=13787 u=root n=ansible | changed: [test-worker1]
+2025-09-25 17:20:40,282 p=13787 u=root n=ansible | changed: [test-master]
+2025-09-25 17:20:40,307 p=13787 u=root n=ansible | TASK [common : Ensure python3 installed] *********************************************************************************************************************
+2025-09-25 17:20:40,564 p=13787 u=root n=ansible | changed: [test-master]
+2025-09-25 17:20:40,569 p=13787 u=root n=ansible | changed: [test-worker1]
+2025-09-25 17:20:40,684 p=13787 u=root n=ansible | changed: [test-worker2]
+2025-09-25 17:20:40,702 p=13787 u=root n=ansible | TASK [common : Ensure /usr/bin/python symlink points to python3] *********************************************************************************************
+2025-09-25 17:20:40,935 p=13787 u=root n=ansible | changed: [test-worker1]
+2025-09-25 17:20:40,965 p=13787 u=root n=ansible | changed: [test-master]
+2025-09-25 17:20:41,009 p=13787 u=root n=ansible | changed: [test-worker2]
+2025-09-25 17:20:41,039 p=13787 u=root n=ansible | TASK [common : Install prerequisites] ************************************************************************************************************************
+2025-09-25 17:20:52,676 p=13787 u=root n=ansible | ok: [test-worker2]
+2025-09-25 17:20:55,177 p=13787 u=root n=ansible | ok: [test-worker1]
+2025-09-25 17:21:16,335 p=13787 u=root n=ansible | ok: [test-master]
+2025-09-25 17:21:16,359 p=13787 u=root n=ansible | TASK [common : Add Docker CE repo (CentOS 9 Stream)] *********************************************************************************************************
+2025-09-25 17:21:19,094 p=13787 u=root n=ansible | changed: [test-worker1]
+2025-09-25 17:21:19,173 p=13787 u=root n=ansible | changed: [test-worker2]
+2025-09-25 17:21:19,300 p=13787 u=root n=ansible | changed: [test-master]
+2025-09-25 17:21:19,315 p=13787 u=root n=ansible | TASK [common : Install Docker packages] **********************************************************************************************************************
+2025-09-25 17:21:23,181 p=13787 u=root n=ansible | ok: [test-worker1]
+2025-09-25 17:21:23,284 p=13787 u=root n=ansible | ok: [test-worker2]
+2025-09-25 17:21:24,456 p=13787 u=root n=ansible | ok: [test-master]
+2025-09-25 17:21:24,473 p=13787 u=root n=ansible | TASK [common : Start and enable Docker service] **************************************************************************************************************
+2025-09-25 17:21:27,262 p=13787 u=root n=ansible | ok: [test-worker1]
+2025-09-25 17:21:27,340 p=13787 u=root n=ansible | ok: [test-worker2]
+2025-09-25 17:21:27,482 p=13787 u=root n=ansible | ok: [test-master]
+2025-09-25 17:21:27,519 p=13787 u=root n=ansible | TASK [common : Wait for Docker socket] ***********************************************************************************************************************
+2025-09-25 17:21:29,576 p=13787 u=root n=ansible | ok: [test-worker2]
+2025-09-25 17:21:29,629 p=13787 u=root n=ansible | ok: [test-worker1]
+2025-09-25 17:21:29,707 p=13787 u=root n=ansible | ok: [test-master]
+2025-09-25 17:21:29,732 p=13787 u=root n=ansible | TASK [common : Install Python Docker SDK] ********************************************************************************************************************
+2025-09-25 17:21:33,160 p=13787 u=root n=ansible | ok: [test-worker1]
+2025-09-25 17:21:33,275 p=13787 u=root n=ansible | ok: [test-worker2]
+2025-09-25 17:21:33,641 p=13787 u=root n=ansible | ok: [test-master]
+2025-09-25 17:21:33,672 p=13787 u=root n=ansible | TASK [common : Add user to docker group] *********************************************************************************************************************
+2025-09-25 17:21:35,808 p=13787 u=root n=ansible | ok: [test-worker1]
+2025-09-25 17:21:35,862 p=13787 u=root n=ansible | ok: [test-worker2]
+2025-09-25 17:21:35,973 p=13787 u=root n=ansible | ok: [test-master]
+2025-09-25 17:21:35,984 p=13787 u=root n=ansible | TASK [common : Docker login via CLI] *************************************************************************************************************************
+2025-09-25 17:21:40,304 p=13787 u=root n=ansible | changed: [test-worker1]
+2025-09-25 17:21:40,394 p=13787 u=root n=ansible | changed: [test-worker2]
+2025-09-25 17:21:40,599 p=13787 u=root n=ansible | changed: [test-master]
+2025-09-25 17:21:40,785 p=13787 u=root n=ansible | PLAY [Initialize Swarm on master] ****************************************************************************************************************************
+2025-09-25 17:21:40,841 p=13787 u=root n=ansible | TASK [swarm_init : Initialize Docker Swarm if not already part of one] ***************************************************************************************
+2025-09-25 17:21:42,365 p=13787 u=root n=ansible | ok: [test-master]
+2025-09-25 17:21:42,389 p=13787 u=root n=ansible | TASK [swarm_init : Check if Swarm is active] *****************************************************************************************************************
+2025-09-25 17:21:44,335 p=13787 u=root n=ansible | changed: [test-master]
+2025-09-25 17:21:44,361 p=13787 u=root n=ansible | TASK [swarm_init : Save worker join token (only if master)] **************************************************************************************************
+2025-09-25 17:21:45,747 p=13787 u=root n=ansible | changed: [test-master]
+2025-09-25 17:21:45,765 p=13787 u=root n=ansible | TASK [swarm_init : Write join token to file] *****************************************************************************************************************
+2025-09-25 17:21:48,355 p=13787 u=root n=ansible | ok: [test-master]
+2025-09-25 17:21:48,442 p=13787 u=root n=ansible | PLAY [Join workers to Swarm] *********************************************************************************************************************************
+2025-09-25 17:21:48,504 p=13787 u=root n=ansible | TASK [swarm_join : Check if node is already part of a Swarm] *************************************************************************************************
+2025-09-25 17:21:50,051 p=13787 u=root n=ansible | ok: [test-worker1]
+2025-09-25 17:21:50,117 p=13787 u=root n=ansible | ok: [test-worker2]
+2025-09-25 17:21:50,136 p=13787 u=root n=ansible | TASK [swarm_join : Join worker to Swarm] *********************************************************************************************************************
+2025-09-25 17:21:51,992 p=13787 u=root n=ansible | changed: [test-worker2]
+2025-09-25 17:21:52,036 p=13787 u=root n=ansible | changed: [test-worker1]
+2025-09-25 17:21:52,182 p=13787 u=root n=ansible | PLAY [Deploy DB stack on master] *****************************************************************************************************************************
+2025-09-25 17:21:52,226 p=13787 u=root n=ansible | TASK [db_stack : Ensure /opt/wordpress directory exists] *****************************************************************************************************
+2025-09-25 17:21:53,549 p=13787 u=root n=ansible | changed: [test-master]
+2025-09-25 17:21:53,574 p=13787 u=root n=ansible | TASK [db_stack : Deploy DB stack] ****************************************************************************************************************************
+2025-09-25 17:21:56,556 p=13787 u=root n=ansible | changed: [test-master]
+2025-09-25 17:21:56,590 p=13787 u=root n=ansible | TASK [db_stack : Start DB stack] *****************************************************************************************************************************
+2025-09-25 17:22:01,639 p=13787 u=root n=ansible | changed: [test-master]
+2025-09-25 17:22:01,808 p=13787 u=root n=ansible | PLAY [Deploy WordPress stack on Swarm] ***********************************************************************************************************************
+2025-09-25 17:22:01,952 p=13787 u=root n=ansible | TASK [wordpress_stack : Deploy WordPress stack] **************************************************************************************************************
+2025-09-25 17:22:05,223 p=13787 u=root n=ansible | changed: [test-master]
+2025-09-25 17:22:05,259 p=13787 u=root n=ansible | TASK [wordpress_stack : Start WordPress stack] ***************************************************************************************************************
+2025-09-25 17:22:10,368 p=13787 u=root n=ansible | changed: [test-master]
+2025-09-25 17:22:10,508 p=13787 u=root n=ansible | PLAY RECAP ***************************************************************************************************************************************************
+2025-09-25 17:22:10,508 p=13787 u=root n=ansible | test-master                : ok=23   changed=13   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2025-09-25 17:22:10,509 p=13787 u=root n=ansible | test-worker1               : ok=16   changed=7    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2025-09-25 17:22:10,509 p=13787 u=root n=ansible | test-worker2               : ok=16   changed=7    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2025-09-25 17:31:41,923 p=21549 u=root n=ansible | [DEPRECATION WARNING]: DEFAULT_GATHER_SUBSET option, the module_defaults keyword is a more generic version and can apply to all calls to the 
+M(ansible.builtin.gather_facts) or M(ansible.builtin.setup) actions, use module_defaults instead. This feature will be removed from ansible-core in version 
+2.18. Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+2025-09-25 17:31:42,179 p=21549 u=root n=ansible | PLAY [Bootstrap common prerequisites] ************************************************************************************************************************
+2025-09-25 17:31:42,200 p=21549 u=root n=ansible | TASK [Gathering Facts] ***************************************************************************************************************************************
+2025-09-25 17:32:01,589 p=21549 u=root n=ansible | ok: [test-worker2]
+2025-09-25 17:32:01,632 p=21549 u=root n=ansible | ok: [test-worker1]
+2025-09-25 17:32:01,657 p=21549 u=root n=ansible | ok: [test-master]
+2025-09-25 17:32:01,733 p=21549 u=root n=ansible | TASK [common : Remove old Docker packages] *******************************************************************************************************************
+2025-09-25 17:32:04,565 p=21549 u=root n=ansible | ok: [test-worker2]
+2025-09-25 17:32:04,573 p=21549 u=root n=ansible | ok: [test-worker1]
+2025-09-25 17:32:05,928 p=21549 u=root n=ansible | ok: [test-master]
+2025-09-25 17:32:05,976 p=21549 u=root n=ansible | TASK [common : Remove old Docker repo if exists] *************************************************************************************************************
+2025-09-25 17:32:08,108 p=21549 u=root n=ansible | changed: [test-master]
+2025-09-25 17:32:08,118 p=21549 u=root n=ansible | changed: [test-worker2]
+2025-09-25 17:32:08,143 p=21549 u=root n=ansible | changed: [test-worker1]
+2025-09-25 17:32:08,164 p=21549 u=root n=ansible | TASK [common : Clean dnf cache] ******************************************************************************************************************************
+2025-09-25 17:32:10,944 p=21549 u=root n=ansible | changed: [test-master]
+2025-09-25 17:32:10,981 p=21549 u=root n=ansible | changed: [test-worker1]
+2025-09-25 17:32:10,993 p=21549 u=root n=ansible | changed: [test-worker2]
+2025-09-25 17:32:11,008 p=21549 u=root n=ansible | TASK [common : Ensure python3 installed] *********************************************************************************************************************
+2025-09-25 17:32:11,317 p=21549 u=root n=ansible | changed: [test-worker1]
+2025-09-25 17:32:11,321 p=21549 u=root n=ansible | changed: [test-master]
+2025-09-25 17:32:11,379 p=21549 u=root n=ansible | changed: [test-worker2]
+2025-09-25 17:32:11,414 p=21549 u=root n=ansible | TASK [common : Ensure /usr/bin/python symlink points to python3] *********************************************************************************************
+2025-09-25 17:32:11,706 p=21549 u=root n=ansible | changed: [test-master]
+2025-09-25 17:32:11,714 p=21549 u=root n=ansible | changed: [test-worker1]
+2025-09-25 17:32:11,771 p=21549 u=root n=ansible | changed: [test-worker2]
+2025-09-25 17:32:11,790 p=21549 u=root n=ansible | TASK [common : Install prerequisites] ************************************************************************************************************************
+2025-09-25 17:32:25,739 p=21549 u=root n=ansible | ok: [test-worker1]
+2025-09-25 17:32:26,132 p=21549 u=root n=ansible | ok: [test-worker2]
+2025-09-25 17:32:50,265 p=21549 u=root n=ansible | ok: [test-master]
+2025-09-25 17:32:50,327 p=21549 u=root n=ansible | TASK [common : Add Docker CE repo (CentOS 9 Stream)] *********************************************************************************************************
+2025-09-25 17:32:52,976 p=21549 u=root n=ansible | changed: [test-worker1]
+2025-09-25 17:32:53,020 p=21549 u=root n=ansible | changed: [test-worker2]
+2025-09-25 17:32:53,289 p=21549 u=root n=ansible | changed: [test-master]
+2025-09-25 17:32:53,315 p=21549 u=root n=ansible | TASK [common : Install Docker packages] **********************************************************************************************************************
+2025-09-25 17:32:57,357 p=21549 u=root n=ansible | ok: [test-worker1]
+2025-09-25 17:32:57,411 p=21549 u=root n=ansible | ok: [test-worker2]
+2025-09-25 17:32:59,447 p=21549 u=root n=ansible | ok: [test-master]
+2025-09-25 17:32:59,475 p=21549 u=root n=ansible | TASK [common : Start and enable Docker service] **************************************************************************************************************
+2025-09-25 17:33:02,269 p=21549 u=root n=ansible | ok: [test-worker1]
+2025-09-25 17:33:02,360 p=21549 u=root n=ansible | ok: [test-worker2]
+2025-09-25 17:33:02,406 p=21549 u=root n=ansible | ok: [test-master]
+2025-09-25 17:33:02,421 p=21549 u=root n=ansible | TASK [common : Wait for Docker socket] ***********************************************************************************************************************
+2025-09-25 17:33:04,310 p=21549 u=root n=ansible | ok: [test-worker2]
+2025-09-25 17:33:04,369 p=21549 u=root n=ansible | ok: [test-worker1]
+2025-09-25 17:33:04,495 p=21549 u=root n=ansible | ok: [test-master]
+2025-09-25 17:33:04,518 p=21549 u=root n=ansible | TASK [common : Install Python Docker SDK] ********************************************************************************************************************
+2025-09-25 17:33:07,894 p=21549 u=root n=ansible | ok: [test-worker1]
+2025-09-25 17:33:07,895 p=21549 u=root n=ansible | ok: [test-master]
+2025-09-25 17:33:07,958 p=21549 u=root n=ansible | ok: [test-worker2]
+2025-09-25 17:33:07,990 p=21549 u=root n=ansible | TASK [common : Add user to docker group] *********************************************************************************************************************
+2025-09-25 17:33:10,298 p=21549 u=root n=ansible | ok: [test-worker1]
+2025-09-25 17:33:10,405 p=21549 u=root n=ansible | ok: [test-worker2]
+2025-09-25 17:33:10,940 p=21549 u=root n=ansible | ok: [test-master]
+2025-09-25 17:33:10,969 p=21549 u=root n=ansible | TASK [common : Docker login via CLI] *************************************************************************************************************************
+2025-09-25 17:33:15,738 p=21549 u=root n=ansible | changed: [test-worker1]
+2025-09-25 17:33:15,758 p=21549 u=root n=ansible | changed: [test-worker2]
+2025-09-25 17:33:15,924 p=21549 u=root n=ansible | changed: [test-master]
+2025-09-25 17:33:16,222 p=21549 u=root n=ansible | PLAY [Initialize Swarm on master] ****************************************************************************************************************************
+2025-09-25 17:33:16,287 p=21549 u=root n=ansible | TASK [swarm_init : Initialize Docker Swarm if not already part of one] ***************************************************************************************
+2025-09-25 17:33:17,823 p=21549 u=root n=ansible | ok: [test-master]
+2025-09-25 17:33:17,838 p=21549 u=root n=ansible | TASK [swarm_init : Check if Swarm is active] *****************************************************************************************************************
+2025-09-25 17:33:19,857 p=21549 u=root n=ansible | changed: [test-master]
+2025-09-25 17:33:19,873 p=21549 u=root n=ansible | TASK [swarm_init : Save worker join token (only if master)] **************************************************************************************************
+2025-09-25 17:33:21,355 p=21549 u=root n=ansible | changed: [test-master]
+2025-09-25 17:33:21,368 p=21549 u=root n=ansible | TASK [swarm_init : Write join token to file] *****************************************************************************************************************
+2025-09-25 17:33:23,800 p=21549 u=root n=ansible | ok: [test-master]
+2025-09-25 17:33:23,890 p=21549 u=root n=ansible | PLAY [Join workers to Swarm] *********************************************************************************************************************************
+2025-09-25 17:33:23,990 p=21549 u=root n=ansible | TASK [swarm_join : Check if node is already part of a Swarm] *************************************************************************************************
+2025-09-25 17:33:25,802 p=21549 u=root n=ansible | ok: [test-worker1]
+2025-09-25 17:33:25,897 p=21549 u=root n=ansible | ok: [test-worker2]
+2025-09-25 17:33:25,978 p=21549 u=root n=ansible | TASK [swarm_join : Join worker to Swarm] *********************************************************************************************************************
+2025-09-25 17:33:26,107 p=21549 u=root n=ansible | skipping: [test-worker1]
+2025-09-25 17:33:26,123 p=21549 u=root n=ansible | skipping: [test-worker2]
+2025-09-25 17:33:26,270 p=21549 u=root n=ansible | PLAY [Deploy DB stack on master] *****************************************************************************************************************************
+2025-09-25 17:33:26,331 p=21549 u=root n=ansible | TASK [db_stack : Ensure /opt/wordpress directory exists] *****************************************************************************************************
+2025-09-25 17:33:27,787 p=21549 u=root n=ansible | ok: [test-master]
+2025-09-25 17:33:27,818 p=21549 u=root n=ansible | TASK [db_stack : Deploy DB stack] ****************************************************************************************************************************
+2025-09-25 17:33:30,466 p=21549 u=root n=ansible | ok: [test-master]
+2025-09-25 17:33:30,480 p=21549 u=root n=ansible | TASK [db_stack : Start DB stack] *****************************************************************************************************************************
+2025-09-25 17:33:35,392 p=21549 u=root n=ansible | changed: [test-master]
+2025-09-25 17:33:35,461 p=21549 u=root n=ansible | PLAY [Deploy WordPress stack on Swarm] ***********************************************************************************************************************
+2025-09-25 17:33:35,493 p=21549 u=root n=ansible | TASK [wordpress_stack : Deploy WordPress stack] **************************************************************************************************************
+2025-09-25 17:33:37,939 p=21549 u=root n=ansible | ok: [test-master]
+2025-09-25 17:33:37,953 p=21549 u=root n=ansible | TASK [wordpress_stack : Start WordPress stack] ***************************************************************************************************************
+2025-09-25 17:33:43,659 p=21549 u=root n=ansible | changed: [test-master]
+2025-09-25 17:33:43,814 p=21549 u=root n=ansible | PLAY RECAP ***************************************************************************************************************************************************
+2025-09-25 17:33:43,815 p=21549 u=root n=ansible | test-master                : ok=23   changed=10   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2025-09-25 17:33:43,815 p=21549 u=root n=ansible | test-worker1               : ok=15   changed=6    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
+2025-09-25 17:33:43,815 p=21549 u=root n=ansible | test-worker2               : ok=15   changed=6    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
+2025-09-26 08:56:32,233 p=3353 u=root n=ansible | [DEPRECATION WARNING]: DEFAULT_GATHER_SUBSET option, the module_defaults 
+keyword is a more generic version and can apply to all calls to the 
+M(ansible.builtin.gather_facts) or M(ansible.builtin.setup) actions, use 
+module_defaults instead. This feature will be removed from ansible-core in 
+version 2.18. Deprecation warnings can be disabled by setting 
+deprecation_warnings=False in ansible.cfg.
+2025-09-26 08:56:33,567 p=3353 u=root n=ansible | PLAY [Bootstrap common prerequisites] ******************************************
+2025-09-26 08:56:33,649 p=3353 u=root n=ansible | TASK [Gathering Facts] *********************************************************
+2025-09-26 08:56:58,285 p=3353 u=root n=ansible | ok: [test-worker1]
+2025-09-26 08:56:58,733 p=3353 u=root n=ansible | ok: [test-worker2]
+2025-09-26 08:56:59,209 p=3353 u=root n=ansible | ok: [test-master]
+2025-09-26 08:56:59,370 p=3353 u=root n=ansible | TASK [common : Remove old Docker packages] *************************************
+2025-09-26 08:57:10,494 p=3353 u=root n=ansible | ok: [test-worker2]
+2025-09-26 08:57:10,539 p=3353 u=root n=ansible | ok: [test-worker1]
+2025-09-26 08:57:14,029 p=3353 u=root n=ansible | ok: [test-master]
+2025-09-26 08:57:14,066 p=3353 u=root n=ansible | TASK [common : Remove old Docker repo if exists] *******************************
+2025-09-26 08:57:17,762 p=3353 u=root n=ansible | changed: [test-worker1]
+2025-09-26 08:57:17,790 p=3353 u=root n=ansible | changed: [test-worker2]
+2025-09-26 08:57:18,334 p=3353 u=root n=ansible | changed: [test-master]
+2025-09-26 08:57:18,378 p=3353 u=root n=ansible | TASK [common : Clean dnf cache] ************************************************
+2025-09-26 08:57:23,029 p=3353 u=root n=ansible | changed: [test-worker1]
+2025-09-26 08:57:23,091 p=3353 u=root n=ansible | changed: [test-worker2]
+2025-09-26 08:57:24,329 p=3353 u=root n=ansible | changed: [test-master]
+2025-09-26 08:57:24,364 p=3353 u=root n=ansible | TASK [common : Ensure python3 installed] ***************************************
+2025-09-26 08:57:25,031 p=3353 u=root n=ansible | changed: [test-worker1]
+2025-09-26 08:57:25,228 p=3353 u=root n=ansible | changed: [test-master]
+2025-09-26 08:57:25,255 p=3353 u=root n=ansible | changed: [test-worker2]
+2025-09-26 08:57:25,339 p=3353 u=root n=ansible | TASK [common : Ensure /usr/bin/python symlink points to python3] ***************
+2025-09-26 08:57:26,002 p=3353 u=root n=ansible | changed: [test-worker1]
+2025-09-26 08:57:26,262 p=3353 u=root n=ansible | changed: [test-worker2]
+2025-09-26 08:57:26,391 p=3353 u=root n=ansible | changed: [test-master]
+2025-09-26 08:57:26,455 p=3353 u=root n=ansible | TASK [common : Install prerequisites] ******************************************
+2025-09-26 08:57:45,096 p=3353 u=root n=ansible | ok: [test-worker1]
+2025-09-26 08:57:45,627 p=3353 u=root n=ansible | ok: [test-worker2]
+2025-09-26 08:58:36,320 p=3353 u=root n=ansible | ok: [test-master]
+2025-09-26 08:58:36,349 p=3353 u=root n=ansible | TASK [common : Add Docker CE repo (CentOS 9 Stream)] ***************************
+2025-09-26 08:58:39,703 p=3353 u=root n=ansible | changed: [test-worker1]
+2025-09-26 08:58:39,830 p=3353 u=root n=ansible | changed: [test-worker2]
+2025-09-26 08:58:39,879 p=3353 u=root n=ansible | changed: [test-master]
+2025-09-26 08:58:39,913 p=3353 u=root n=ansible | TASK [common : Install Docker packages] ****************************************
+2025-09-26 08:58:45,085 p=3353 u=root n=ansible | ok: [test-worker2]
+2025-09-26 08:58:45,097 p=3353 u=root n=ansible | ok: [test-worker1]
+2025-09-26 08:58:50,520 p=3353 u=root n=ansible | ok: [test-master]
+2025-09-26 08:58:50,587 p=3353 u=root n=ansible | TASK [common : Start and enable Docker service] ********************************
+2025-09-26 08:58:57,056 p=3353 u=root n=ansible | ok: [test-worker2]
+2025-09-26 08:58:57,076 p=3353 u=root n=ansible | ok: [test-worker1]
+2025-09-26 08:58:59,722 p=3353 u=root n=ansible | ok: [test-master]
+2025-09-26 08:58:59,792 p=3353 u=root n=ansible | TASK [common : Wait for Docker socket] *****************************************
+2025-09-26 08:59:03,801 p=3353 u=root n=ansible | ok: [test-worker1]
+2025-09-26 08:59:03,914 p=3353 u=root n=ansible | ok: [test-worker2]
+2025-09-26 08:59:04,605 p=3353 u=root n=ansible | ok: [test-master]
+2025-09-26 08:59:04,648 p=3353 u=root n=ansible | TASK [common : Install Python Docker SDK] **************************************
+2025-09-26 08:59:10,471 p=3353 u=root n=ansible | ok: [test-worker2]
+2025-09-26 08:59:10,566 p=3353 u=root n=ansible | ok: [test-worker1]
+2025-09-26 08:59:10,903 p=3353 u=root n=ansible | ok: [test-master]
+2025-09-26 08:59:10,933 p=3353 u=root n=ansible | TASK [common : Add user to docker group] ***************************************
+2025-09-26 08:59:14,168 p=3353 u=root n=ansible | ok: [test-worker1]
+2025-09-26 08:59:14,214 p=3353 u=root n=ansible | ok: [test-worker2]
+2025-09-26 08:59:14,221 p=3353 u=root n=ansible | ok: [test-master]
+2025-09-26 08:59:14,266 p=3353 u=root n=ansible | TASK [common : Docker login via CLI] *******************************************
+2025-09-26 08:59:19,784 p=3353 u=root n=ansible | changed: [test-worker1]
+2025-09-26 08:59:20,031 p=3353 u=root n=ansible | changed: [test-master]
+2025-09-26 08:59:20,052 p=3353 u=root n=ansible | changed: [test-worker2]
+2025-09-26 08:59:20,322 p=3353 u=root n=ansible | PLAY [Initialize Swarm on master] **********************************************
+2025-09-26 08:59:20,390 p=3353 u=root n=ansible | TASK [swarm_init : Initialize Docker Swarm if not already part of one] *********
+2025-09-26 08:59:22,445 p=3353 u=root n=ansible | ok: [test-master]
+2025-09-26 08:59:22,477 p=3353 u=root n=ansible | TASK [swarm_init : Check if Swarm is active] ***********************************
+2025-09-26 08:59:25,235 p=3353 u=root n=ansible | changed: [test-master]
+2025-09-26 08:59:25,265 p=3353 u=root n=ansible | TASK [swarm_init : Save worker join token (only if master)] ********************
+2025-09-26 08:59:27,404 p=3353 u=root n=ansible | changed: [test-master]
+2025-09-26 08:59:27,432 p=3353 u=root n=ansible | TASK [swarm_init : Write join token to file] ***********************************
+2025-09-26 08:59:31,178 p=3353 u=root n=ansible | ok: [test-master]
+2025-09-26 08:59:31,282 p=3353 u=root n=ansible | PLAY [Join workers to Swarm] ***************************************************
+2025-09-26 08:59:31,377 p=3353 u=root n=ansible | TASK [swarm_join : Check if node is already part of a Swarm] *******************
+2025-09-26 08:59:34,608 p=3353 u=root n=ansible | ok: [test-worker1]
+2025-09-26 08:59:34,842 p=3353 u=root n=ansible | ok: [test-worker2]
+2025-09-26 08:59:34,870 p=3353 u=root n=ansible | TASK [swarm_join : Join worker to Swarm] ***************************************
+2025-09-26 08:59:34,948 p=3353 u=root n=ansible | skipping: [test-worker1]
+2025-09-26 08:59:34,984 p=3353 u=root n=ansible | skipping: [test-worker2]
+2025-09-26 08:59:35,168 p=3353 u=root n=ansible | PLAY [Deploy DB stack on master] ***********************************************
+2025-09-26 08:59:35,236 p=3353 u=root n=ansible | TASK [db_stack : Ensure /opt/wordpress directory exists] ***********************
+2025-09-26 08:59:37,249 p=3353 u=root n=ansible | ok: [test-master]
+2025-09-26 08:59:37,294 p=3353 u=root n=ansible | TASK [db_stack : Deploy DB stack] **********************************************
+2025-09-26 08:59:40,571 p=3353 u=root n=ansible | ok: [test-master]
+2025-09-26 08:59:40,601 p=3353 u=root n=ansible | TASK [db_stack : Start DB stack] ***********************************************
+2025-09-26 08:59:46,730 p=3353 u=root n=ansible | changed: [test-master]
+2025-09-26 08:59:46,928 p=3353 u=root n=ansible | PLAY [Deploy WordPress stack on Swarm] *****************************************
+2025-09-26 08:59:47,020 p=3353 u=root n=ansible | TASK [wordpress_stack : Deploy WordPress stack] ********************************
+2025-09-26 08:59:51,415 p=3353 u=root n=ansible | ok: [test-master]
+2025-09-26 08:59:51,468 p=3353 u=root n=ansible | TASK [wordpress_stack : Start WordPress stack] *********************************
+2025-09-26 08:59:59,364 p=3353 u=root n=ansible | changed: [test-master]
+2025-09-26 08:59:59,567 p=3353 u=root n=ansible | PLAY RECAP *********************************************************************
+2025-09-26 08:59:59,568 p=3353 u=root n=ansible | test-master                : ok=23   changed=10   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2025-09-26 08:59:59,568 p=3353 u=root n=ansible | test-worker1               : ok=15   changed=6    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
+2025-09-26 08:59:59,568 p=3353 u=root n=ansible | test-worker2               : ok=15   changed=6    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
+2025-09-26 09:16:46,751 p=8767 u=root n=ansible | [DEPRECATION WARNING]: DEFAULT_GATHER_SUBSET option, the module_defaults keyword is a more generic version and can apply to all calls to the 
+M(ansible.builtin.gather_facts) or M(ansible.builtin.setup) actions, use module_defaults instead. This feature will be removed from ansible-core in version 
+2.18. Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+2025-09-26 09:16:53,056 p=8767 u=root n=ansible | Encryption successful
+2025-09-26 09:18:22,755 p=8831 u=root n=ansible | ERROR! input is already encrypted
+2025-09-26 09:18:32,499 p=8844 u=root n=ansible | PLAY [Bootstrap common prerequisites] ************************************************************************************************************************
+2025-09-26 09:18:32,590 p=8844 u=root n=ansible | TASK [Gathering Facts] ***************************************************************************************************************************************
+2025-09-26 09:18:54,077 p=8844 u=root n=ansible | ok: [test-worker1]
+2025-09-26 09:18:54,281 p=8844 u=root n=ansible | ok: [test-worker2]
+2025-09-26 09:18:54,970 p=8844 u=root n=ansible | ok: [test-master]
+2025-09-26 09:18:55,307 p=8844 u=root n=ansible | TASK [common : Remove old Docker packages] *******************************************************************************************************************
+2025-09-26 09:19:01,791 p=8844 u=root n=ansible | ok: [test-worker2]
+2025-09-26 09:19:01,854 p=8844 u=root n=ansible | ok: [test-worker1]
+2025-09-26 09:19:04,179 p=8844 u=root n=ansible | ok: [test-master]
+2025-09-26 09:19:04,231 p=8844 u=root n=ansible | TASK [common : Remove old Docker repo if exists] *************************************************************************************************************
+2025-09-26 09:19:07,983 p=8844 u=root n=ansible | changed: [test-worker1]
+2025-09-26 09:19:07,984 p=8844 u=root n=ansible | changed: [test-worker2]
+2025-09-26 09:19:08,404 p=8844 u=root n=ansible | changed: [test-master]
+2025-09-26 09:19:08,515 p=8844 u=root n=ansible | TASK [common : Clean dnf cache] ******************************************************************************************************************************
+2025-09-26 09:19:13,190 p=8844 u=root n=ansible | changed: [test-worker2]
+2025-09-26 09:19:13,204 p=8844 u=root n=ansible | changed: [test-worker1]
+2025-09-26 09:19:14,306 p=8844 u=root n=ansible | changed: [test-master]
+2025-09-26 09:19:14,409 p=8844 u=root n=ansible | TASK [common : Ensure python3 installed] *********************************************************************************************************************
+2025-09-26 09:19:14,872 p=8844 u=root n=ansible | changed: [test-worker1]
+2025-09-26 09:19:14,889 p=8844 u=root n=ansible | changed: [test-master]
+2025-09-26 09:19:15,005 p=8844 u=root n=ansible | changed: [test-worker2]
+2025-09-26 09:19:15,128 p=8844 u=root n=ansible | TASK [common : Ensure /usr/bin/python symlink points to python3] *********************************************************************************************
+2025-09-26 09:19:15,771 p=8844 u=root n=ansible | changed: [test-worker1]
+2025-09-26 09:19:15,801 p=8844 u=root n=ansible | changed: [test-master]
+2025-09-26 09:19:15,827 p=8844 u=root n=ansible | changed: [test-worker2]
+2025-09-26 09:19:15,944 p=8844 u=root n=ansible | TASK [common : Install prerequisites] ************************************************************************************************************************
+2025-09-26 09:19:34,184 p=8844 u=root n=ansible | ok: [test-worker2]
+2025-09-26 09:19:34,699 p=8844 u=root n=ansible | ok: [test-worker1]
+2025-09-26 09:20:19,423 p=8844 u=root n=ansible | ok: [test-master]
+2025-09-26 09:20:19,513 p=8844 u=root n=ansible | TASK [common : Add Docker CE repo (CentOS 9 Stream)] *********************************************************************************************************
+2025-09-26 09:20:23,584 p=8844 u=root n=ansible | changed: [test-worker1]
+2025-09-26 09:20:23,627 p=8844 u=root n=ansible | changed: [test-worker2]
+2025-09-26 09:20:23,963 p=8844 u=root n=ansible | changed: [test-master]
+2025-09-26 09:20:24,082 p=8844 u=root n=ansible | TASK [common : Install Docker packages] **********************************************************************************************************************
+2025-09-26 09:20:29,758 p=8844 u=root n=ansible | ok: [test-worker1]
+2025-09-26 09:20:29,945 p=8844 u=root n=ansible | ok: [test-worker2]
+2025-09-26 09:20:32,967 p=8844 u=root n=ansible | ok: [test-master]
+2025-09-26 09:20:33,089 p=8844 u=root n=ansible | TASK [common : Start and enable Docker service] **************************************************************************************************************
+2025-09-26 09:20:38,136 p=8844 u=root n=ansible | ok: [test-worker2]
+2025-09-26 09:20:38,279 p=8844 u=root n=ansible | ok: [test-worker1]
+2025-09-26 09:20:38,514 p=8844 u=root n=ansible | ok: [test-master]
+2025-09-26 09:20:38,628 p=8844 u=root n=ansible | TASK [common : Open ports for Docker Swarm] ******************************************************************************************************************
+2025-09-26 09:20:43,405 p=8844 u=root n=ansible | changed: [test-worker1] => (item=2377/tcp)
+2025-09-26 09:20:43,423 p=8844 u=root n=ansible | ok: [test-master] => (item=2377/tcp)
+2025-09-26 09:20:43,983 p=8844 u=root n=ansible | changed: [test-worker2] => (item=2377/tcp)
+2025-09-26 09:20:47,965 p=8844 u=root n=ansible | ok: [test-master] => (item=7946/tcp)
+2025-09-26 09:20:48,166 p=8844 u=root n=ansible | changed: [test-worker1] => (item=7946/tcp)
+2025-09-26 09:20:48,312 p=8844 u=root n=ansible | changed: [test-worker2] => (item=7946/tcp)
+2025-09-26 09:20:52,746 p=8844 u=root n=ansible | ok: [test-master] => (item=7946/udp)
+2025-09-26 09:20:52,992 p=8844 u=root n=ansible | changed: [test-worker1] => (item=7946/udp)
+2025-09-26 09:20:53,364 p=8844 u=root n=ansible | changed: [test-worker2] => (item=7946/udp)
+2025-09-26 09:20:57,214 p=8844 u=root n=ansible | changed: [test-worker1] => (item=4789/udp)
+2025-09-26 09:20:57,282 p=8844 u=root n=ansible | changed: [test-worker2] => (item=4789/udp)
+2025-09-26 09:20:57,676 p=8844 u=root n=ansible | ok: [test-master] => (item=4789/udp)
+2025-09-26 09:20:57,801 p=8844 u=root n=ansible | TASK [common : Reload firewalld] *****************************************************************************************************************************
+2025-09-26 09:21:03,629 p=8844 u=root n=ansible | changed: [test-worker1]
+2025-09-26 09:21:03,760 p=8844 u=root n=ansible | changed: [test-worker2]
+2025-09-26 09:21:05,425 p=8844 u=root n=ansible | changed: [test-master]
+2025-09-26 09:21:05,572 p=8844 u=root n=ansible | TASK [common : Wait for Docker socket] ***********************************************************************************************************************
+2025-09-26 09:21:11,439 p=8844 u=root n=ansible | ok: [test-worker2]
+2025-09-26 09:21:11,492 p=8844 u=root n=ansible | ok: [test-worker1]
+2025-09-26 09:21:11,784 p=8844 u=root n=ansible | ok: [test-master]
+2025-09-26 09:21:11,853 p=8844 u=root n=ansible | TASK [common : Install Python Docker SDK] ********************************************************************************************************************
+2025-09-26 09:21:18,961 p=8844 u=root n=ansible | ok: [test-worker1]
+2025-09-26 09:21:19,207 p=8844 u=root n=ansible | ok: [test-worker2]
+2025-09-26 09:21:20,243 p=8844 u=root n=ansible | ok: [test-master]
+2025-09-26 09:21:20,330 p=8844 u=root n=ansible | TASK [common : Add user to docker group] *********************************************************************************************************************
+2025-09-26 09:21:25,214 p=8844 u=root n=ansible | ok: [test-worker1]
+2025-09-26 09:21:25,486 p=8844 u=root n=ansible | ok: [test-worker2]
+2025-09-26 09:21:26,527 p=8844 u=root n=ansible | ok: [test-master]
+2025-09-26 09:21:26,637 p=8844 u=root n=ansible | TASK [common : Docker login via CLI] *************************************************************************************************************************
+2025-09-26 09:21:33,688 p=8844 u=root n=ansible | changed: [test-master]
+2025-09-26 09:21:33,827 p=8844 u=root n=ansible | changed: [test-worker1]
+2025-09-26 09:21:34,111 p=8844 u=root n=ansible | changed: [test-worker2]
+2025-09-26 09:21:36,088 p=8844 u=root n=ansible | PLAY [Initialize Swarm on master] ****************************************************************************************************************************
+2025-09-26 09:21:36,231 p=8844 u=root n=ansible | TASK [Gathering Facts] ***************************************************************************************************************************************
+2025-09-26 09:21:58,004 p=8844 u=root n=ansible | ok: [test-master]
+2025-09-26 09:21:58,144 p=8844 u=root n=ansible | TASK [swarm_init : Initialize Docker Swarm if not already part of one] ***************************************************************************************
+2025-09-26 09:22:00,928 p=8844 u=root n=ansible | ok: [test-master]
+2025-09-26 09:22:00,982 p=8844 u=root n=ansible | TASK [swarm_init : Check if Swarm is active] *****************************************************************************************************************
+2025-09-26 09:22:04,379 p=8844 u=root n=ansible | changed: [test-master]
+2025-09-26 09:22:04,439 p=8844 u=root n=ansible | TASK [swarm_init : Save worker join token (only if master)] **************************************************************************************************
+2025-09-26 09:22:07,247 p=8844 u=root n=ansible | changed: [test-master]
+2025-09-26 09:22:07,306 p=8844 u=root n=ansible | TASK [swarm_init : Write join token to file] *****************************************************************************************************************
+2025-09-26 09:22:12,527 p=8844 u=root n=ansible | ok: [test-master]
+2025-09-26 09:22:13,007 p=8844 u=root n=ansible | PLAY [Join workers to Swarm] *********************************************************************************************************************************
+2025-09-26 09:22:13,082 p=8844 u=root n=ansible | TASK [Gathering Facts] ***************************************************************************************************************************************
+2025-09-26 09:22:35,079 p=8844 u=root n=ansible | ok: [test-worker1]
+2025-09-26 09:22:35,175 p=8844 u=root n=ansible | ok: [test-worker2]
+2025-09-26 09:22:35,581 p=8844 u=root n=ansible | TASK [swarm_join : Check if node is already part of a Swarm] *************************************************************************************************
+2025-09-26 09:22:39,927 p=8844 u=root n=ansible | ok: [test-worker1]
+2025-09-26 09:22:40,302 p=8844 u=root n=ansible | ok: [test-worker2]
+2025-09-26 09:22:40,403 p=8844 u=root n=ansible | TASK [swarm_join : Join worker to Swarm] *********************************************************************************************************************
+2025-09-26 09:22:40,527 p=8844 u=root n=ansible | skipping: [test-worker1]
+2025-09-26 09:22:40,595 p=8844 u=root n=ansible | skipping: [test-worker2]
+2025-09-26 09:22:41,328 p=8844 u=root n=ansible | PLAY [Deploy DB stack on master] *****************************************************************************************************************************
+2025-09-26 09:22:41,458 p=8844 u=root n=ansible | TASK [Gathering Facts] ***************************************************************************************************************************************
+2025-09-26 09:23:03,265 p=8844 u=root n=ansible | ok: [test-master]
+2025-09-26 09:23:03,589 p=8844 u=root n=ansible | TASK [db_stack : Ensure /opt/wordpress directory exists] *****************************************************************************************************
+2025-09-26 09:23:07,326 p=8844 u=root n=ansible | ok: [test-master]
+2025-09-26 09:23:07,445 p=8844 u=root n=ansible | TASK [db_stack : Deploy DB stack] ****************************************************************************************************************************
+2025-09-26 09:23:12,694 p=8844 u=root n=ansible | ok: [test-master]
+2025-09-26 09:23:12,752 p=8844 u=root n=ansible | TASK [db_stack : Start DB stack] *****************************************************************************************************************************
+2025-09-26 09:23:19,466 p=8844 u=root n=ansible | changed: [test-master]
+2025-09-26 09:23:19,940 p=8844 u=root n=ansible | PLAY [Deploy WordPress stack on Swarm] ***********************************************************************************************************************
+2025-09-26 09:23:20,080 p=8844 u=root n=ansible | TASK [Gathering Facts] ***************************************************************************************************************************************
+2025-09-26 09:23:40,572 p=8844 u=root n=ansible | ok: [test-master]
+2025-09-26 09:23:40,789 p=8844 u=root n=ansible | TASK [wordpress_stack : Deploy WordPress stack] **************************************************************************************************************
+2025-09-26 09:23:46,025 p=8844 u=root n=ansible | ok: [test-master]
+2025-09-26 09:23:46,120 p=8844 u=root n=ansible | TASK [wordpress_stack : Start WordPress stack] ***************************************************************************************************************
+2025-09-26 09:23:53,037 p=8844 u=root n=ansible | changed: [test-master]
+2025-09-26 09:23:53,503 p=8844 u=root n=ansible | PLAY RECAP ***************************************************************************************************************************************************
+2025-09-26 09:23:53,504 p=8844 u=root n=ansible | test-master                : ok=28   changed=11   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2025-09-26 09:23:53,504 p=8844 u=root n=ansible | test-worker1               : ok=18   changed=8    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
+2025-09-26 09:23:53,504 p=8844 u=root n=ansible | test-worker2               : ok=18   changed=8    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   

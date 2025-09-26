@@ -72,6 +72,23 @@
     state: started
     enabled: yes
 
+# Open Port
+- name: Open ports for Docker Swarm
+  firewalld:
+    port: "{{ item }}"
+    permanent: yes
+    state: enabled
+  loop:
+    - 2377/tcp   # Swarm management
+    - 7946/tcp   # Gossip
+    - 7946/udp   # Gossip
+    - 4789/udp   # Overlay network
+
+- name: Reload firewalld
+  command: firewall-cmd --reload
+
+
+
 # 6. Docker socket 준비 확인
 - name: Wait for Docker socket
   wait_for:

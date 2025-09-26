@@ -19,7 +19,7 @@
 Ansible 컨트롤 노드에서 다음 명령어를 사용하여 프로젝트 저장소를 클론합니다.
 
 ```bash
-git clone <your_repository_url>
+git clone https://github.com/serverinfra-3-mini/mini-project.git
 ```
 
 ## 3. 디렉토리 이동 (Change Directory)

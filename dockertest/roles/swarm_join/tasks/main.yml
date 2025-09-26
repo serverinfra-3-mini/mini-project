@@ -1,0 +1,13 @@
+- name: Check if node is already part of a Swarm
+  shell: docker info --format '{{"{{.Swarm.LocalNodeState}}"}}'
+  register: swarm_state
+  changed_when: false
+
+- name: Join worker to Swarm
+  shell: docker swarm join --token {{ hostvars['test-master'].worker_token.stdout }} {{ hostvars['test-master'].ansible_host }}:2377
+  when: swarm_state.stdout != "active"
+  register: swarm_join_result
+  retries: 5
+  delay: 10
+  until: swarm_join_result.rc == 0
+

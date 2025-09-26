@@ -1,0 +1,20 @@
+- name: Initialize Docker Swarm if not already part of one
+  shell: docker swarm init --advertise-addr {{ ansible_host }} || true
+  register: swarm_init_result
+  changed_when: "'Error response from daemon' not in swarm_init_result.stderr"
+
+- name: Check if Swarm is active
+  shell: docker info --format '{{"{{.Swarm.LocalNodeState}}"}}'
+  register: swarm_state
+
+- name: Save worker join token (only if master)
+  shell: docker swarm join-token -q worker
+  register: worker_token
+  when: swarm_state.stdout == "active"
+
+- name: Write join token to file
+  copy:
+    dest: /tmp/worker_join_token.txt
+    content: "{{ worker_token.stdout }}"
+  when: swarm_state.stdout == "active"
+

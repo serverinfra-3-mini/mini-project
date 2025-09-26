@@ -1,0 +1,102 @@
+---
+# 1. 기존 Docker 제거 및 repo cleanup
+- name: Remove old Docker packages
+  dnf:
+    name:
+      - docker
+      - docker-client
+      - docker-client-latest
+      - docker-common
+      - docker-latest
+      - docker-latest-logrotate
+      - docker-logrotate
+      - docker-engine
+    state: absent
+
+- name: Remove old Docker repo if exists
+  file:
+    path: /etc/yum.repos.d/docker-ce.repo
+    state: absent
+
+- name: Clean dnf cache
+  command: dnf clean all
+
+# 2. Python3 설치 및 심볼릭 링크 생성
+- name: Ensure python3 installed
+  raw: |
+    if ! command -v python3 >/dev/null 2>&1; then
+      dnf -y install python3
+    fi
+
+- name: Ensure /usr/bin/python symlink points to python3
+  raw: |
+    if [ ! -x /usr/bin/python ]; then
+      ln -s /usr/bin/python3 /usr/bin/python || true
+    fi
+
+# 3. 필수 패키지 설치
+- name: Install prerequisites
+  dnf:
+    name:
+      - dnf-plugins-core
+      - curl
+      - git
+      - wget
+      - unzip
+      - tar
+      - python3-pip
+    state: present
+    update_cache: yes
+
+# 4. Docker CE repo 추가
+- name: Add Docker CE repo (CentOS 9 Stream)
+  command: dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  args:
+    creates: /etc/yum.repos.d/docker-ce.repo
+
+# 5. Docker 설치
+- name: Install Docker packages
+  dnf:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-compose-plugin
+      - docker-buildx-plugin
+    state: present
+    enablerepo: docker-ce-stable
+
+- name: Start and enable Docker service
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+# 6. Docker socket 준비 확인
+- name: Wait for Docker socket
+  wait_for:
+    path: /var/run/docker.sock
+    state: started
+    timeout: 30
+
+# 7. Python Docker SDK 설치
+- name: Install Python Docker SDK
+  pip:
+    name: docker
+    executable: /usr/bin/pip3
+
+# 8. 현재 사용자 Docker 그룹에 추가
+- name: Add user to docker group
+  user:
+    name: "{{ docker_user }}"
+    groups: docker
+    append: yes
+
+# 9. Docker Hub 로그인 (CLI 방식 안정화)
+- name: Docker login via CLI
+  become: true
+  shell: |
+    echo "{{ docker_password }}" | docker login -u "{{ docker_username }}" --password-stdin
+  environment:
+    DOCKER_HOST: unix:///var/run/docker.sock
+

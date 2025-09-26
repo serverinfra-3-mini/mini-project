@@ -1,0 +1,51 @@
+# wordpress-stack.yml
+version: '3.8' # Docker Swarm stack 파일 버전
+
+services:
+  wordpress:
+    image: wordpress:latest # 공식 워드프레스 Docker 이미지 사용
+    ports:
+      - "80:80" # 호스트의 80번 포트를 워드프레스 컨테이너의 80번 포트에 연결
+    environment:
+      WORDPRESS_DB_HOST: db:3306 # 데이터베이스 호스트 (서비스 이름:포트)
+      WORDPRESS_DB_USER: wordpress # 워드프레스가 사용할 DB 유저
+      WORDPRESS_DB_PASSWORD: dbpw # <<-- **반드시 강력한 비밀번호로 변경하세요!**
+      WORDPRESS_DB_NAME: wordpressdb # 워드프레스가 사용할 DB 이름
+    volumes:
+      - wordpress_data:/var/www/html # 워드프레스 파일(플러그인, 테마 등) 영속성 유지
+    networks:
+      - app-network
+    deploy:
+      replicas: 2 # 워드프레스 컨테이너 1개로 시작 (필요시 스케일 아웃 가능)
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+    depends_on:
+      - db # db 서비스가 먼저 시작되어야 합니다.
+
+  db:
+    image: mysql:5.7 # MySQL 5.7 이미지 사용 (워드프레스와 호환성 좋음)
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpw # <<-- **반드시 강력한 비밀번호로 변경하세요!**
+      MYSQL_DATABASE: wordpressdb # 워드프레스가 사용할 DB 이름
+      MYSQL_USER: wordpress # 워드프레스가 사용할 DB 유저
+      MYSQL_PASSWORD: dbpw # <<-- **반드시 강력한 비밀번호로 변경하세요!**
+    volumes:
+      - db_data:/var/lib/mysql # MySQL 데이터 영속성 유지
+    networks:
+      - app-network
+    deploy:
+      replicas: 1 # DB 컨테이너는 1개 (고가용성 필요시 복제 및 추가 설정 필요)
+      placement:
+        constraints:
+          - node.role == manager # DB는 마스터 노드에 배포되도록 강제 (단일 장애점 고려)
+
+volumes:
+  wordpress_data: # 워드프레스 파일 저장을 위한 볼륨 정의
+  db_data:        # MySQL 데이터 저장을 위한 볼륨 정의
+
+networks:
+  app-network:
+    driver: overlay # 클러스터 노드 간 통신을 위한 오버레이 네트워크

@@ -1,0 +1,90 @@
+# playbook_setup_swarm.yml 또는 별도의 firewall_setup.yml 파일에 포함
+# Master 노드용 Firewalld 설정
+
+- name: Master node firewalld configuration for Docker Swarm and services
+  hosts: master # 마스터 노드 그룹에만 적용
+  become: yes
+  tasks:
+    - name: Ensure firewalld service is running
+      ansible.builtin.systemd:
+        name: firewalld
+        state: started
+        enabled: yes
+
+    # 1. SSH (관리용)
+    - name: Allow SSH port (22/tcp)
+      ansible.posix.firewalld:
+        port: 22/tcp
+        zone: public
+        state: enabled
+        permanent: true
+      notify: Reload firewalld
+
+    # 2. Docker Swarm 관리 포트
+    - name: Allow Docker Swarm management ports (2377/tcp)
+      ansible.posix.firewalld:
+        port: 2377/tcp
+        zone: public
+        state: enabled
+        permanent: true
+      notify: Reload firewalld
+
+    # 3. Docker Swarm Overlay Network 통신 포트 (모든 Swarm 노드에 필수)
+    - name: Allow Docker Swarm overlay network ports (7946 tcp/udp, 4789/udp)
+      ansible.posix.firewalld:
+        port: "{{ item.port }}/{{ item.protocol }}"
+        zone: public
+        state: enabled
+        permanent: true
+      loop:
+        - { port: 7946, protocol: 'tcp' }
+        - { port: 7946, protocol: 'udp' }
+        - { port: 4789, protocol: 'udp' }
+      notify: Reload firewalld
+
+    # 4. 웹 서비스 포트 (워드프레스 웹 트래픽)
+    - name: Allow HTTP (80/tcp) for web access
+      ansible.posix.firewalld:
+        port: 80/tcp
+        zone: public
+        state: enabled
+        permanent: true
+      notify: Reload firewalld
+    
+    # 5. DB 서비스 포트 (MySQL 3306/tcp)
+    #    워드프레스 컨테이너 (워커 노드)가 마스터 노드의 DB 컨테이너로 접속하기 위해 필요합니다.
+    #    아래 Docker bridge 인터페이스를 trusted zone에 추가하는 방법이 더 포괄적이고 권장됩니다.
+    #    하지만 만약 특정 IP 대역만 허용하려면 다음과 같이 설정합니다:
+    # - name: Allow MySQL port (3306/tcp) from Docker overlay network (specific range)
+    #   ansible.posix.firewalld:
+    #     source: "10.0.0.0/24" # Docker Swarm Overlay Network의 서브넷으로 교체
+    #     port: 3306/tcp
+    #     zone: public
+    #     state: enabled
+    #     permanent: true
+    #   notify: Reload firewalld
+
+    # 6. Docker가 생성하는 브릿지 인터페이스를 trusted zone에 추가 (가장 중요!)
+    #    이것이 내부 Docker 통신 (Swarm overlay, service-to-service)의 No route to host를 해결하는 핵심입니다.
+    - name: Add docker_gwbridge to trusted zone
+      ansible.posix.firewalld:
+        interface: docker_gwbridge
+        zone: trusted
+        state: enabled
+        permanent: true
+      notify: Reload firewalld
+
+    - name: Add docker0 to trusted zone
+      ansible.posix.firewalld:
+        interface: docker0
+        zone: trusted
+        state: enabled
+        permanent: true
+      notify: Reload firewalld
+
+  handlers:
+    - name: Reload firewalld
+      ansible.builtin.systemd:
+        name: firewalld
+        state: reloaded
+      listen: "Reload firewalld" # notify의 이름과 동일하게 설정

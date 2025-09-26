@@ -5,6 +5,7 @@ services:
   wordpress:
     image: wordpress:latest # 공식 워드프레스 Docker 이미지 사용
     ports:
+      - "443:443"
       - "80:80" # 호스트의 80번 포트를 워드프레스 컨테이너의 80번 포트에 연결
     environment:
       WORDPRESS_DB_HOST: db:3306 # 데이터베이스 호스트 (서비스 이름:포트)
@@ -16,7 +17,7 @@ services:
     networks:
       - app-network
     deploy:
-      replicas: 2 # 워드프레스 컨테이너 1개로 시작 (필요시 스케일 아웃 가능)
+      replicas: 1 # 워드프레스 컨테이너 1개로 시작 (필요시 스케일 아웃 가능)
       update_config:
         parallelism: 1
         delay: 10s

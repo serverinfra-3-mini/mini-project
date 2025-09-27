@@ -1,0 +1,75 @@
+# roles/system_security_setup/tasks/main.yml
+---
+- name: Set SELinux to permissive mode (for easier troubleshooting)
+  ansible.posix.selinux:
+    state: permissive
+  tags: security_setup
+
+- name: Ensure firewalld service is running
+  ansible.builtin.systemd:
+    name: firewalld
+    state: started
+    enabled: yes
+  tags: security_setup
+  notify: Reload firewalld
+
+# SSH (관리용)
+- name: Allow SSH port (22/tcp)
+  ansible.posix.firewalld:
+    port: 22/tcp
+    zone: public
+    state: enabled
+    permanent: true
+  tags: security_setup
+  notify: Reload firewalld
+
+# Docker Swarm 통신 포트 (모든 Swarm 노드에 필수)
+- name: Allow Docker Swarm management port (2377/tcp) on master
+  ansible.posix.firewalld:
+    port: 2377/tcp
+    zone: public
+    state: enabled
+    permanent: true
+  when: inventory_hostname in groups['master']
+  tags: security_setup
+  notify: Reload firewalld
+
+- name: Allow Docker Swarm overlay network ports (7946 tcp/udp, 4789/udp) on all nodes
+  ansible.posix.firewalld:
+    port: "{{ item.port }}/{{ item.protocol }}"
+    zone: public
+    state: enabled
+    permanent: true
+  loop:
+    - { port: 7946, protocol: 'tcp' }
+    - { port: 7946, protocol: 'udp' }
+    - { port: 4789, protocol: 'udp' }
+  tags: security_setup
+  notify: Reload firewalld
+
+# 웹 서비스 포트 (워드프레스 웹 트래픽)
+- name: Allow HTTP (80/tcp) for web access
+  ansible.posix.firewalld:
+    port: 80/tcp
+    zone: public
+    state: enabled
+    permanent: true
+  tags: security_setup
+  notify: Reload firewalld
+
+# DB 서비스 포트 (MySQL 3306/tcp) - 마스터 노드에 DB가 배포될 경우
+# 워커 노드에서 마스터 노드의 DB로 접속하기 위해 마스터 노드의 3306 포트를 열어줍니다.
+- name: Allow MySQL port (3306/tcp) on master node for internal access
+  ansible.posix.firewalld:
+    port: 3306/tcp
+    zone: public
+    state: enabled
+    permanent: true
+  when: inventory_hostname in groups['master']
+  tags: security_setup
+  notify: Reload firewalld
+
+# 중요: Docker가 생성하는 브릿지 인터페이스(docker0, docker_gwbridge)를
+#       firewalld의 특정 zone (trusted 등)에 추가하지 않습니다.
+#       Docker 데몬이 시작 시 firewalld와 호환되는 iptables 규칙을 자체적으로 생성하도록 합니다.
+#       이전 ZONE_CONFLICT 오류의 주된 원인이었습니다.

@@ -1,27 +1,19 @@
 # roles/docker_install/tasks/main.yml
 ---
-- name: Update dnf cache and install essential packages
-  dnf:
-    name: dnf-utils
+- name: Install yum-utils
+  ansible.builtin.dnf:
+    name: yum-utils
     state: present
-    update_cache: yes
-  tags: install_docker
+  tags: docker_install
 
-- name: Add Docker GPG key
-  rpm_key:
-    state: present
-    key: https://download.docker.com/linux/centos/gpg
-  tags: install_docker
+- name: Add Docker repo
+  ansible.builtin.command: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  args:
+    creates: /etc/yum.repos.d/docker-ce.repo
+  tags: docker_install
 
-- name: Add Docker YUM repository
-  ansible.builtin.get_url:
-    url: https://download.docker.com/linux/centos/docker-ce.repo
-    dest: /etc/yum.repos.d/docker-ce.repo
-    mode: '0644'
-  tags: install_docker
-
-- name: Install Docker Engine, CLI, and Containerd
-  dnf:
+- name: Install Docker CE packages
+  ansible.builtin.dnf:
     name:
       - docker-ce
       - docker-ce-cli
@@ -29,21 +21,21 @@
       - docker-buildx-plugin
       - docker-compose-plugin
     state: present
-    update_cache: yes
-  tags: install_docker
+    update_cache: true
+  tags: docker_install
 
-- name: Start Docker service and enable on boot
+- name: Start and enable Docker service
   ansible.builtin.systemd:
     name: docker
     state: started
     enabled: yes
-  tags: install_docker
+  tags: docker_install
 
-- name: Add remote user to docker group
+- name: Add user to docker group
   ansible.builtin.user:
-    name: "{{ ansible_user }}" # Ansible이 원격 접속 시 사용하는 사용자 이름입니다.
+    name: "{{ ansible_user }}"
     groups: docker
     append: yes
-  notify:
-    - Request SSH session re-login after adding to Docker group
-  tags: install_docker
+  tags: docker_install
+  # 이 태스크는 현재 사용자(ansible_user)가 docker 명령을 sudo 없이 사용할 수 있게 합니다.
+  # 변경 사항을 적용하려면 현재 사용자의 쉘을 다시 로드하거나 재로그인해야 할 수 있습니다.

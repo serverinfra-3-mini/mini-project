@@ -1,0 +1,7 @@
+# roles/system_security_setup/handlers/main.yml
+---
+- name: Reload firewalld
+  ansible.builtin.systemd:
+    name: firewalld
+    state: reloaded
+  listen: "Reload firewalld"

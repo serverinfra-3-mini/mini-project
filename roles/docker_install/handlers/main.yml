@@ -16,5 +16,4 @@
 - name: Reload docker
   ansible.builtin.systemd:
     name: docker
-    state: restart
-
+    state: restarted

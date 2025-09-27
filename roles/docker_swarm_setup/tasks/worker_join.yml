@@ -1,15 +1,5 @@
 # roles/docker_swarm_setup/tasks/worker_join.yml
 ---
-- name: Open Docker Swarm ports on worker node
-  ansible.posix.firewalld:
-    zone: public
-    port: "{{ item.port }}/{{ item.protocol }}"
-    permanent: yes
-    state: enabled
-  loop: "{{ swarm_ports_to_open }}"
-  notify:
-    - Reload firewalld
-    - Reload docker
 - name: Ensure master node facts are available before joining worker
   ansible.builtin.wait_for:
     timeout: 60 # 60초 동안 기다림

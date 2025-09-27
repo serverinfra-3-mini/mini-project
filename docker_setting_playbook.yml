@@ -1,0 +1,15 @@
+---
+- name: install Docker and configure on Rocky Linux 9
+  hosts: all                     # inventory.ini에 정의된 모든 호스트에 Docker를 설치합니다.
+  become: yes                    # 설치 및 설정에는 root 권한이 필요합니다.
+
+  roles:
+    - docker_install             # 위에서 정의한 롤을 호출합니다.
+- name: configure Docker Swarm Cluster
+  hosts: all                     # inventory.ini에 정의된 모든 호스트에 롤을 적용합니다.
+  become: yes                    # Swarm 설정에는 root 권한이 필요합니다.
+  gather_facts: yes              # ansible_host 등의 변수 사용을 위해 팩트 수집이 필요합니다.
+
+  roles:
+    - docker_swarm_setup         # 위에서 정의한 롤을 호출합니다.
+

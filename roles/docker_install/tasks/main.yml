@@ -47,3 +47,14 @@
   notify:
     - Request SSH session re-login after adding to Docker group
   tags: install_docker
+- name: Open Docker Swarm ports on master node
+  ansible.posix.firewalld:
+    zone: public
+    port: "{{ item.port }}/{{ item.protocol }}"
+    permanent: yes
+    state: enabled
+  loop: "{{ swarm_ports_to_open }}"
+  notify:
+    - Reload firewalld
+    - Reload docker
+

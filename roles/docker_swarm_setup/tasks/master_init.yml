@@ -1,15 +1,5 @@
 # roles/docker_swarm_setup/tasks/master_init.yml
 ---
-- name: Open Docker Swarm ports on master node
-  ansible.posix.firewalld:
-    zone: public
-    port: "{{ item.port }}/{{ item.protocol }}"
-    permanent: yes
-    state: enabled
-  loop: "{{ swarm_ports_to_open }}"
-  notify:
-    - Reload firewalld
-
 - name: Check if Docker Swarm is already active on master node
   ansible.builtin.shell: docker info --format '{% raw %}{{.Swarm.LocalNodeState}}{% endraw %}'
   register: docker_swarm_state_result

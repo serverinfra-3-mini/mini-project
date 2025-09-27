@@ -17,12 +17,15 @@ services:
     networks:
       - app-network
     deploy:
-      replicas: 1 # 워드프레스 컨테이너 1개로 시작 (필요시 스케일 아웃 가능)
+      replicas: 10 # 워드프레스 컨테이너 1개로 시작 (필요시 스케일 아웃 가능)
       update_config:
         parallelism: 1
         delay: 10s
       restart_policy:
-        condition: on-failure
+        condition: any
+      placement:
+        constraints:
+        - node.role == worker # DB는 마스터 노드에 배포되도록 강제 (단일 장애점 고려)
     depends_on:
       - db # db 서비스가 먼저 시작되어야 합니다.
 
@@ -39,9 +42,15 @@ services:
       - app-network
     deploy:
       replicas: 1 # DB 컨테이너는 1개 (고가용성 필요시 복제 및 추가 설정 필요)
+      resources:
+        reservations: # 컨테이너가 보장받는 최소 리소스
+          cpus: '1.0'
+          memory: 2G
       placement:
         constraints:
           - node.role == manager # DB는 마스터 노드에 배포되도록 강제 (단일 장애점 고려)
+    command: ["mysqld", "--max_connections=300", "--innodb_buffer_pool_size=1G"] # 예시
+
 
 volumes:
   wordpress_data: # 워드프레스 파일 저장을 위한 볼륨 정의

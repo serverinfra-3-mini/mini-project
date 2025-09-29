@@ -21,4 +21,4 @@
       vars:
         # 🟢 정의된 변수를 '새로운 이름'으로 '값'만 전달합니다.
         docker_board_path_for_role: "{{ docker_board_base_path }}" # Role 내부에서 사용할 변수명으로 매핑
-      when: inventory_hostname in groups['manager']
+      when: inventory_hostname in groups['manager'][0]

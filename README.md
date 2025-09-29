@@ -37,6 +37,10 @@ inventory.ini 파일을 열어 Docker Swarm 마스터 노드와 워커 노드로
 [master]
 192.168.100.132  # <-- 마스터 노드의 실제 IP 주소로 수정
 
+[manager]
+192.168.100.132  # <-- 마스터 노드는 매니저로 고정
+192.168.100.*    # <-- 매니저 노드 추가 가능
+
 [worker]
 192.168.100.133  # <-- 첫 번째 워커 노드의 실제 IP 주소로 수정
 192.168.100.135  # <-- 두 번째 워커 노드의 실제 IP 주소로 수정
@@ -92,4 +96,27 @@ ID                            HOSTNAME            STATUS    AVAILABILITY   MANAG
 6f7g8h9i0j...                 node-worker1        Ready     Active         <none>           24.0.5
 k1l2m3n4o5...                 node-worker2        Ready     Active         <none>           24.0.5
 ...
+```
+
+## 7. 도커 스택 확인
+
+스택 목록 확인:
+
+`docker stack ls`
+
+예상 출력 결과:
+```
+NAME      SERVICES
+blog      2
+```
+
+서비스 목록 확인:
+
+`docker stack services blog`
+
+예상 출력 결과:
+```
+ID             NAME       MODE         REPLICAS   IMAGE                        PORTS
+q4o6wieg4a9c   blog_db    replicated   1/1        mysql:8.0
+3f6vanir454c   blog_web   replicated   3/3        jinhwan794/my-blog-web:1.0   *:8080->80/tcp
 ```

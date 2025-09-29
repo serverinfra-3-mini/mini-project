@@ -1,0 +1,33 @@
+# roles/docker_swarm_deployer/tasks/main.yml (수정)
+---
+- name: Check if blog-stack.yml exists on controller
+  ansible.builtin.stat:
+    # 🟢 전달받은 'docker_board_path_for_role' 변수를 사용합니다.
+    path: "{{ docker_board_path_for_role }}/blog-stack.yml"
+  register: blog_stack_file_status
+  delegate_to: localhost
+
+- name: Fail if blog-stack.yml does not exist
+  ansible.builtin.fail:
+    msg: "blog-stack.yml file not found at {{ docker_board_path_for_role }}/blog-stack.yml. Please ensure it exists."
+  when: not blog_stack_file_status.stat.exists
+  delegate_to: localhost
+
+- name: Copy blog-stack.yml to the manager node
+  ansible.builtin.copy:
+    # 🟢 전달받은 'docker_board_path_for_role' 변수를 사용합니다.
+    src: "{{ docker_board_path_for_role }}/blog-stack.yml"
+    dest: "{{ remote_blog_stack_path }}"
+    mode: '0644'
+    owner: root
+    group: root
+
+- name: Deploy Docker Swarm stack on the manager node
+  ansible.builtin.command: >
+    docker stack deploy -c {{ remote_blog_stack_path }} {{ blog_stack_name }}
+  register: blog_deploy_result
+  changed_when: blog_deploy_result.rc == 0
+
+- name: Display Docker stack deployment result
+  ansible.builtin.debug:
+    var: blog_deploy_result.stdout_lines

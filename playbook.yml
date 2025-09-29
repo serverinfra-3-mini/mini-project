@@ -3,4 +3,5 @@
 
 - import_playbook: docker_setting_playbook.yml
 
-- import_playbook: deploy_wordpress_playbook.yml
+- import_playbook: deploy_blog_playbook.yml
+

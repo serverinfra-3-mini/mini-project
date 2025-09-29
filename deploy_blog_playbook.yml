@@ -1,0 +1,24 @@
+# deploy-blog.yml (수정)
+---
+- name: Deploy My Blog Application
+  hosts: all
+  become: yes
+
+  vars:
+    # 🟢 여기에만 'docker_board_path'를 정의합니다.
+    # {{ playbook_dir }}은 현재 플레이북(deploy-blog.yml)이 위치한 디렉토리의 절대 경로를 의미합니다.
+    docker_board_base_path: "{{ playbook_dir }}/docker-board" # << 변수명도 헷갈리지 않게 'base_path'로 변경했습니다.
+
+  tasks:
+    - name: Run my_blog_role for web content deployment
+      ansible.builtin.include_role:
+        name: my_blog_role
+      when: inventory_hostname in groups['worker']
+
+    - name: Run docker_swarm_deployer role for stack deployment
+      ansible.builtin.include_role:
+        name: docker_swarm_deployer
+      vars:
+        # 🟢 정의된 변수를 '새로운 이름'으로 '값'만 전달합니다.
+        docker_board_path_for_role: "{{ docker_board_base_path }}" # Role 내부에서 사용할 변수명으로 매핑
+      when: inventory_hostname in groups['manager']

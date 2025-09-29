@@ -1,0 +1,6 @@
+# roles/docker_swarm_deployer/defaults/main.yml
+---
+# Role의 기본 변수들을 정의합니다.
+remote_blog_stack_path: "/tmp/blog-stack.yml" # manager 노드에 복사될 임시 경로
+blog_stack_name: "blog"                      # 배포될 스택의 이름
+# docker_board_path는 메인 플레이북에서 넘겨받는 것이 더 유연합니다.

@@ -1,0 +1,67 @@
+# blog-stack.yml (수정)
+version: '3.8'
+
+services:
+  web:
+    # build: . # 이 줄을 제거하거나 주석 처리합니다.
+    image: jinhwan794/my-blog-web:1.0 # <<-- 빌드한 이미지의 전체 이름을 지정합니다.
+    # container_name: blog_web_server # Docker Swarm에서는 이 설정을 사용하지 않습니다.
+    volumes:
+      - /opt/my-blog/www:/var/www/html
+    ports:
+      - "8080:80"
+    networks:
+      - blog-net
+    depends_on:
+      - db
+    deploy:
+      replicas: 3
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+          - node.role == worker
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          cpus: '0.1'
+          memory: 64M
+
+  db:
+    image: mysql:8.0
+    # container_name: blog_db_server # Docker Swarm에서는 이 설정을 사용하지 않습니다.
+    environment:
+      MYSQL_ROOT_PASSWORD: your_strong_password! # <<-- **반드시 강력한 비밀번호로 변경하세요!**
+      MYSQL_DATABASE: blog_data
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - blog-net
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 0
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+          - node.role == manager
+      resources:
+        reservations:
+          cpus: '1.0'
+          memory: 2G
+        limits:
+          cpus: '2.0'
+          memory: 4G
+
+networks:
+  blog-net:
+    driver: overlay
+
+volumes:
+  db_data:

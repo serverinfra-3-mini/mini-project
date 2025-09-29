@@ -1,0 +1,17 @@
+# my_blog_role/tasks/main.yml
+---
+- name: Ensure web content directory exists on worker node
+  ansible.builtin.file:
+    path: /opt/my-blog/www  # worker 노드의 마운트 경로
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Copy index.php to worker node's web directory
+  ansible.builtin.copy:
+    src: files/index.php   # role의 files 디렉토리에서 가져옴
+    dest: /opt/my-blog/www/index.php
+    mode: '0644'
+    owner: root
+    group: root

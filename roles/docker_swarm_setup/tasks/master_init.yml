@@ -45,3 +45,8 @@
   ansible.builtin.debug:
     msg: "Worker node join command: {{ swarm_worker_join_command }}"
   when: swarm_worker_join_command is defined and swarm_worker_join_command | trim != ""
+
+- name: Debug print manager join command (Master node)
+  ansible.builtin.debug:
+    msg: "Worker node join command: {{ swarm_manager_join_command }}"
+  when: swarm_manager_join_command is defined and swarm_manager_join_command | trim != ""

@@ -17,7 +17,7 @@ services:
     networks:
       - app-network
     deploy:
-      replicas: 10 # 워드프레스 컨테이너 1개로 시작 (필요시 스케일 아웃 가능)
+      replicas: 5 # 워드프레스 컨테이너 1개로 시작 (필요시 스케일 아웃 가능)
       update_config:
         parallelism: 1
         delay: 10s

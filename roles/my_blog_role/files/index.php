@@ -8,6 +8,8 @@ define('DB_NAME', 'blog_data');
 
 // Establish Connection
 $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+$timezone = new DateTimeZone('Asia/Seoul');
+
 
 if ($conn->connect_error) {
     // DB 연결 실패 시 에러 메시지 출력
@@ -91,7 +93,11 @@ if (!$conn->query($sql_check_table)) {
                     echo "<div class='post-item'>";
                     echo "<div class='post-title'>" . htmlspecialchars($row["title"]) . "</div>";
                     echo "<div class='post-content'>" . htmlspecialchars($row["content"]) . "</div>";
-                    echo "<div class='post-meta'>작성일: " . $row["created_at"] . "</div>";
+                    
+                    $date = new DateTime($row["created_at"]);
+                    $date->setTimezone($timezone);
+                    $formatted_date = $date->format('Y-m-d H:i');
+                    echo "<div class='post-meta'>작성일: " . $formatted_date . "</div>";
                     echo "</div>";
                 }
             } else {
